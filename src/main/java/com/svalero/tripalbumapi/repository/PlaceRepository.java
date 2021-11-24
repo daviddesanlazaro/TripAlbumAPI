@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface PlaceRepository extends CrudRepository<Place, Long> {
+
     List<Place> findAll();
-    Place findById(int id);
-    List<Place> findByProvinceId(int provinceId);
+    List<Place> findByProvinceId(long provinceId);
 }
