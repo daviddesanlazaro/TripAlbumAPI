@@ -14,9 +14,9 @@ import javax.persistence.*;
 public class Province {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Column
     private String name;
     @Column(name = "country_id")
-    private int countryId;
+    private long countryId;
 }

@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @Column
     private String name;
     @Column
@@ -24,5 +24,5 @@ public class Place {
     @Column
     private float longitude;
     @Column(name = "province_id")
-    private int provinceId;
+    private long provinceId;
 }
