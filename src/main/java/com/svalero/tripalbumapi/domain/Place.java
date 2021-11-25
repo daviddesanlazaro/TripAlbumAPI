@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,8 @@ public class Place {
     private float latitude;
     @Column
     private float longitude;
-    @Column(name = "province_id")
-    private long provinceId;
+    @ManyToOne
+    @JoinColumn(name = "province_id")
+    @JsonBackReference(value = "province-place")
+    private Province province;
 }

@@ -1,8 +1,15 @@
 package com.svalero.tripalbumapi.service;
 
+import com.svalero.tripalbumapi.domain.Country;
 import com.svalero.tripalbumapi.domain.Place;
+import com.svalero.tripalbumapi.domain.Province;
+import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
+import com.svalero.tripalbumapi.exception.CountryNotFoundException;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
+import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
 import com.svalero.tripalbumapi.repository.PlaceRepository;
+import com.svalero.tripalbumapi.repository.ProvinceRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +20,8 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Autowired
     private PlaceRepository placeRepository;
+    @Autowired
+    private ProvinceRepository provinceRepository;
 
     @Override
     public List<Place> findAllPlaces() {
@@ -20,8 +29,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Place> findAllPlaces(long provinceId) {
-        return placeRepository.findByProvinceId(provinceId);
+    public List<Place> findPlaces(Province province) {
+        return placeRepository.findByProvince(province);
     }
 
     @Override
@@ -31,7 +40,13 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place addPlace(Place place) {
+    public Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException {
+        Province province = provinceRepository.findById(placeDto.getProvince())
+                .orElseThrow(ProvinceNotFoundException::new);
+
+        ModelMapper mapper = new ModelMapper();
+        Place place = mapper.map(placeDto, Place.class);
+        place.setProvince(province);
         return placeRepository.save(place);
     }
 
@@ -44,14 +59,15 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place modifyPlace(long id, Place newPlace) throws PlaceNotFoundException {
+    public Place modifyPlace(long id, PlaceDTO newPlaceDto) throws PlaceNotFoundException, ProvinceNotFoundException {
         Place place = placeRepository.findById(id)
                 .orElseThrow(PlaceNotFoundException::new);
-        place.setName(newPlace.getName());
-        place.setDescription(newPlace.getDescription());
-        place.setLatitude(newPlace.getLatitude());
-        place.setLongitude(newPlace.getLongitude());
-        place.setProvinceId(newPlace.getProvinceId());
+        Province province = provinceRepository.findById(id)
+                .orElseThrow(ProvinceNotFoundException::new);
+
+        ModelMapper mapper = new ModelMapper();
+        Place newPlace = mapper.map(newPlaceDto, Place.class);
+        newPlace.setProvince(province);
 
         return placeRepository.save(place);
     }

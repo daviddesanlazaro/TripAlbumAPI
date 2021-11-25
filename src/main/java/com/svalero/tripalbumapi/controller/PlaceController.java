@@ -1,8 +1,10 @@
 package com.svalero.tripalbumapi.controller;
 
 import com.svalero.tripalbumapi.domain.Place;
+import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
+import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
 import com.svalero.tripalbumapi.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +20,9 @@ public class PlaceController {
     private PlaceService placeService;
 
     @GetMapping("/places")
-    public List<Place> getPlacesByProvinceId(@RequestParam(name = "province", defaultValue = "0") long provinceId) {
+    public List<Place> getPlaces() {
         List<Place> places;
-
-        if (provinceId == 0) {
-            places = placeService.findAllPlaces();
-        } else {
-            places = placeService.findAllPlaces(provinceId);
-        }
+        places = placeService.findAllPlaces();
         return places;
     }
 
@@ -42,14 +39,14 @@ public class PlaceController {
     }
 
     @PostMapping("/places")
-    public Place addPlace(@RequestBody Place place) {
-        Place newPlace = placeService.addPlace(place);
-        return newPlace;
+    public Place addPlace(@RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
+        Place place = placeService.addPlace(placeDto);
+        return place;
     }
 
     @PutMapping("/place/{id}")
-    public Place modifyPlace(@RequestBody Place place, @PathVariable long id) throws PlaceNotFoundException {
-        Place newPlace = placeService.modifyPlace(id, place);
+    public Place modifyPlace(@RequestBody PlaceDTO placeDto, @PathVariable long id) throws PlaceNotFoundException, ProvinceNotFoundException {
+        Place newPlace = placeService.modifyPlace(id, placeDto);
         return newPlace;
     }
 
