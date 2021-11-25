@@ -1,16 +1,19 @@
 package com.svalero.tripalbumapi.service;
 
 import com.svalero.tripalbumapi.domain.Place;
+import com.svalero.tripalbumapi.domain.Province;
+import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
+import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
 
 import java.util.List;
 
 public interface PlaceService {
     List<Place> findAllPlaces();
-    List<Place> findAllPlaces(long provinceId);
+    List<Place> findPlaces(Province province);
     Place findPlace(long id) throws PlaceNotFoundException;
 
-    Place addPlace(Place place);
+    Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException;
     Place deletePlace(long id) throws PlaceNotFoundException;
-    Place modifyPlace(long id, Place place) throws PlaceNotFoundException;
+    Place modifyPlace(long id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
 }
