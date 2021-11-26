@@ -43,7 +43,6 @@ public class CountryServiceImpl implements CountryService {
         Country country = countryRepository.findById(id)
                 .orElseThrow(CountryNotFoundException::new);
         country.setName(newCountry.getName());
-        country.setName(newCountry.getName());
 
         return countryRepository.save(country);
     }
