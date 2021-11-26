@@ -77,9 +77,10 @@ public class VisitServiceImpl implements VisitService {
                 .orElseThrow(PlaceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
-        Visit newVisit = mapper.map(newVisitDto, Visit.class);
-        newVisit.setUser(user);
-        newVisit.setPlace(place);
+        visit = mapper.map(newVisitDto, Visit.class);
+        visit.setId(id);
+        visit.setUser(user);
+        visit.setPlace(place);
         return visitRepository.save(visit);
     }
 }

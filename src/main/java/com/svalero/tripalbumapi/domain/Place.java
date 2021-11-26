@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +27,8 @@ public class Place {
     private float longitude;
     @ManyToOne
     @JoinColumn(name = "province_id")
-    @JsonBackReference(value = "province-place")
     private Province province;
+    @OneToMany(mappedBy = "place")
+    @JsonBackReference(value = "place-visit")
+    private List<Visit> visits;
 }

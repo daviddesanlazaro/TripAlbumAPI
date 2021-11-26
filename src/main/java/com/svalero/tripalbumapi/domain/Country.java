@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Country {
     private String name;
 
     @OneToMany(mappedBy = "country")
+    @JsonBackReference(value = "country-province")
     private List<Province> provinces;
 
 }

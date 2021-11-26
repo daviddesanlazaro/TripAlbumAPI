@@ -62,12 +62,13 @@ public class PlaceServiceImpl implements PlaceService {
     public Place modifyPlace(long id, PlaceDTO newPlaceDto) throws PlaceNotFoundException, ProvinceNotFoundException {
         Place place = placeRepository.findById(id)
                 .orElseThrow(PlaceNotFoundException::new);
-        Province province = provinceRepository.findById(id)
+        Province province = provinceRepository.findById(newPlaceDto.getProvince())
                 .orElseThrow(ProvinceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
-        Place newPlace = mapper.map(newPlaceDto, Place.class);
-        newPlace.setProvince(province);
+        place = mapper.map(newPlaceDto, Place.class);
+        place.setId(id);
+        place.setProvince(province);
 
         return placeRepository.save(place);
     }

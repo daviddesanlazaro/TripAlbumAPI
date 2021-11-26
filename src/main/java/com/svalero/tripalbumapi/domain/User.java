@@ -1,10 +1,12 @@
 package com.svalero.tripalbumapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +27,8 @@ public class User {
     private String phone;
     @Column(name = "send_data")
     private boolean sendData;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference(value = "user-visit")
+    private List<Visit> visits;
 }
