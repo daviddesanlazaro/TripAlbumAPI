@@ -1,11 +1,15 @@
 package com.svalero.tripalbumapi.controller;
 
 import com.svalero.tripalbumapi.domain.Place;
+import com.svalero.tripalbumapi.domain.User;
+import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
+import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.service.PlaceService;
+import com.svalero.tripalbumapi.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,8 @@ public class PlaceController {
 
     @Autowired
     private PlaceService placeService;
+    @Autowired
+    private VisitService visitService;
 
     @GetMapping("/places")
     public List<Place> getPlaces() {
@@ -49,6 +55,14 @@ public class PlaceController {
         Place newPlace = placeService.modifyPlace(id, placeDto);
         return newPlace;
     }
+    @GetMapping("/place/{placeId}/visits")
+    public List<Visit> getVisitsByPlace(@PathVariable long placeId) throws PlaceNotFoundException {
+        List<Visit> visits = null;
+        Place place = placeService.findPlace(placeId);
+        visits = visitService.findVisitsByPlace(place);
+        return visits;
+    }
+
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
