@@ -64,11 +64,11 @@ public class ProvinceServiceImpl implements ProvinceService {
                 .orElseThrow(CountryNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
-        Province newProvince = mapper.map(newProvinceDto, Province.class);
-        newProvince.setCountry(country);
+        province = mapper.map(newProvinceDto, Province.class);
+        province.setId(id);
+        province.setCountry(country);
 
-        return provinceRepository.save(newProvince);
+        return provinceRepository.save(province);
     }
-
 
 }

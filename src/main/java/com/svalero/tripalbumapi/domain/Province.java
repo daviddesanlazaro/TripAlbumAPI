@@ -20,6 +20,5 @@ public class Province {
     private String name;
     @ManyToOne
     @JoinColumn(name = "country_id")
-    @JsonBackReference(value = "country-province")
     private Country country;
 }

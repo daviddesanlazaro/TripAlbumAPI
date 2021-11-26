@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -19,13 +20,12 @@ public class Visit {
     private long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference(value = "user-visit")
     private User user;
     @ManyToOne
     @JoinColumn(name = "place_id")
-    @JsonBackReference(value = "place-visit")
     private Place place;
     @Column
+    @DateTimeFormat(pattern="dd-MM-yyyy")
     private LocalDate date;
     @Column
     private float rating;
