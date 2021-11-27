@@ -54,6 +54,18 @@ public class VisitController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PlaceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
+        ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
+        ErrorResponse errorResponse = new ErrorResponse("1", unfe.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
