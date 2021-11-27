@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAllUsers(boolean sendData, String name, String surname) {
+        return userRepository.findBySendDataOrNameOrSurname(sendData, name, surname);
+    }
+
+    @Override
     public User addUser(User user) {
         return userRepository.save(user);
     }
