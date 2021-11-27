@@ -63,7 +63,6 @@ public class PlaceController {
         return visits;
     }
 
-
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());

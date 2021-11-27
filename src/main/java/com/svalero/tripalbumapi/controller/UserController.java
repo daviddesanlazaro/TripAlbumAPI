@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.controller;
 
+import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
@@ -22,10 +23,18 @@ public class UserController {
     private VisitService visitService;
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        List<User> users;
+    public List<User> getUsers(
+            @RequestParam(name = "send_data", required = false) boolean sendData,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "surname", required = false) String surname,
+            @RequestParam(name = "view_all", defaultValue = "true") boolean viewAll) {
 
-        users = userService.findAllUsers();
+        List<User> users;
+        if (viewAll) {
+            users = userService.findAllUsers();
+        } else {
+            users = userService.findAllUsers(sendData, name, surname);
+        }
         return users;
     }
 

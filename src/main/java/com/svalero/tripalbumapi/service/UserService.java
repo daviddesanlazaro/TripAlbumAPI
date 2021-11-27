@@ -10,6 +10,7 @@ import java.util.List;
 public interface UserService {
     List<User> findAllUsers();
     User findUser(long id) throws UserNotFoundException;
+    List<User> findAllUsers(boolean sendData, String name, String surname);
 
     User addUser(User user);
     User deleteUser(long id) throws UserNotFoundException;
