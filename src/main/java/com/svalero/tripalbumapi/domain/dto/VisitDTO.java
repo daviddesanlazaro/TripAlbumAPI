@@ -2,6 +2,7 @@ package com.svalero.tripalbumapi.domain.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 

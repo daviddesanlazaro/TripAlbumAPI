@@ -69,6 +69,12 @@ public class ProvinceController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CountryNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCountryNotFoundException(CountryNotFoundException cnfe) {
+        ErrorResponse errorResponse = new ErrorResponse("1", cnfe.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");

@@ -70,6 +70,12 @@ public class PlaceController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ProvinceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProvinceNotFoundException(ProvinceNotFoundException pnfe) {
+        ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
