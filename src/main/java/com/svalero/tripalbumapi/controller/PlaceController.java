@@ -79,6 +79,14 @@ public class PlaceController {
         return visits;
     }
 
+    @PatchMapping("/place/{id}")
+    public Place patchPlace(@PathVariable long id, @RequestBody String description) throws PlaceNotFoundException {
+        logger.info("Start PatchPlace " + id);
+        Place place = placeService.patchPlace(id, description);
+        logger.info("End patchPlace " + id);
+        return place;
+    }
+
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());

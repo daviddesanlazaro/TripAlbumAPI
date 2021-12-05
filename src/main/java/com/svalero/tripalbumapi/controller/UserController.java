@@ -89,6 +89,14 @@ public class UserController {
         return visits;
     }
 
+    @PatchMapping("/user/{id}")
+    public User patchUser(@PathVariable long id, @RequestBody String email) throws UserNotFoundException {
+        logger.info("Start PatchUser " + id);
+        User user = userService.patchUser(id, email);
+        logger.info("End patchUser " + id);
+        return user;
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", unfe.getMessage());

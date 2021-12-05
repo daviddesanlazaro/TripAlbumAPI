@@ -78,6 +78,14 @@ public class CountryController {
         return provinces;
     }
 
+    @PatchMapping("/country/{id}")
+    public Country patchCountry(@PathVariable long id, @RequestBody String name) throws CountryNotFoundException {
+        logger.info("Start PatchCountry " + id);
+        Country country = countryService.patchCountry(id, name);
+        logger.info("End patchCountry " + id);
+        return country;
+    }
+
     @ExceptionHandler(CountryNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCountryNotFoundException(CountryNotFoundException cnfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", cnfe.getMessage());

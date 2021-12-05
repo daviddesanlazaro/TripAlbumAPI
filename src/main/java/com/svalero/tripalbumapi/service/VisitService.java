@@ -17,4 +17,5 @@ public interface VisitService {
     Visit addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException;
     Visit deleteVisit(long id) throws VisitNotFoundException;
     Visit modifyVisit(long id, VisitDTO visitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException;
+    Visit patchVisit(long id, String commentary) throws VisitNotFoundException;
 }

@@ -16,4 +16,5 @@ public interface PlaceService {
     Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException;
     Place deletePlace(long id) throws PlaceNotFoundException;
     Place modifyPlace(long id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
+    Place patchPlace(long id, String description) throws PlaceNotFoundException;
 }

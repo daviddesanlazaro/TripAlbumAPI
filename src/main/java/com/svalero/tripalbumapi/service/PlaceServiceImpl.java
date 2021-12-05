@@ -1,10 +1,8 @@
 package com.svalero.tripalbumapi.service;
 
-import com.svalero.tripalbumapi.domain.Country;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.Province;
 import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
-import com.svalero.tripalbumapi.exception.CountryNotFoundException;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
 import com.svalero.tripalbumapi.repository.PlaceRepository;
@@ -70,6 +68,14 @@ public class PlaceServiceImpl implements PlaceService {
         place.setId(id);
         place.setProvince(province);
 
+        return placeRepository.save(place);
+    }
+
+    @Override
+    public Place patchPlace(long id, String description) throws PlaceNotFoundException {
+        Place place = placeRepository.findById(id)
+                .orElseThrow(PlaceNotFoundException::new);
+        place.setDescription(description);
         return placeRepository.save(place);
     }
 
