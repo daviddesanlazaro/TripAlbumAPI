@@ -63,6 +63,14 @@ public class VisitController {
         return newVisit;
     }
 
+    @PatchMapping("/visit/{id}")
+    public Visit patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
+        logger.info("Start PatchVisit " + id);
+        Visit visit = visitService.patchVisit(id, commentary);
+        logger.info("End patchVisit " + id);
+        return visit;
+    }
+
     @ExceptionHandler(VisitNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleVisitNotFoundException(VisitNotFoundException vnfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", vnfe.getMessage());

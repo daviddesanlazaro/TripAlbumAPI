@@ -81,6 +81,14 @@ public class ProvinceController {
         return places;
     }
 
+    @PatchMapping("/province/{id}")
+    public Province patchProvince(@PathVariable long id, @RequestBody String name) throws ProvinceNotFoundException {
+        logger.info("Start PatchProvince " + id);
+        Province province = provinceService.patchProvince(id, name);
+        logger.info("End patchProvince " + id);
+        return province;
+    }
+
     @ExceptionHandler(ProvinceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProvinceNotFoundException(ProvinceNotFoundException pnfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());

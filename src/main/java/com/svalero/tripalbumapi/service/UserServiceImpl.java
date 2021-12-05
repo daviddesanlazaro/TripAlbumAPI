@@ -56,4 +56,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public User patchUser(long id, String email) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        user.setEmail(email);
+        return userRepository.save(user);
+    }
+
 }

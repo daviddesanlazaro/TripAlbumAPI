@@ -83,4 +83,12 @@ public class VisitServiceImpl implements VisitService {
         visit.setPlace(place);
         return visitRepository.save(visit);
     }
+
+    @Override
+    public Visit patchVisit(long id, String commentary) throws VisitNotFoundException {
+        Visit visit = visitRepository.findById(id)
+                .orElseThrow(VisitNotFoundException::new);
+        visit.setComment(commentary);
+        return visitRepository.save(visit);
+    }
 }
