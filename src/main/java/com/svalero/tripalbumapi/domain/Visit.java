@@ -29,5 +29,5 @@ public class Visit {
     @Column
     private float rating;
     @Column
-    private String comment;
+    private String commentary;
 }

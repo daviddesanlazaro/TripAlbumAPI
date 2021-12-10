@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -88,7 +89,19 @@ public class VisitServiceImpl implements VisitService {
     public Visit patchVisit(long id, String commentary) throws VisitNotFoundException {
         Visit visit = visitRepository.findById(id)
                 .orElseThrow(VisitNotFoundException::new);
-        visit.setComment(commentary);
+        visit.setCommentary(commentary);
         return visitRepository.save(visit);
+    }
+
+    @Override
+    public List<Visit> findRecentVisits(LocalDate localDate) {
+        return visitRepository.findRecentVisits(localDate);
+    }
+
+    @Override
+    public String findCommentary(long id) throws VisitNotFoundException {
+        Visit visit = visitRepository.findById(id)
+                .orElseThrow(VisitNotFoundException::new);
+        return visitRepository.findCommentary(id);
     }
 }

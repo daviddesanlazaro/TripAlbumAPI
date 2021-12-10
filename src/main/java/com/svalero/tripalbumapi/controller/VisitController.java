@@ -4,13 +4,17 @@ import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.*;
 import com.svalero.tripalbumapi.service.VisitService;
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -69,6 +73,25 @@ public class VisitController {
         Visit visit = visitService.patchVisit(id, commentary);
         logger.info("End patchVisit " + id);
         return visit;
+    }
+
+    @GetMapping("/visits/date")
+    public List<Visit> findRecentVisits(@RequestBody String date) {
+        logger.info("Start findRecentVisits. Convert date");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(date, dtf);
+        logger.info("Date converted");
+        List<Visit> visits = visitService.findRecentVisits(localDate);
+        logger.info("End findRecentVisits");
+        return visits;
+    }
+
+    @GetMapping("/visit/{id}/commentary")
+    public String findCommentary(@PathVariable long id) throws VisitNotFoundException {
+        logger.info("Start findCommentary");
+        String commentary = visitService.findCommentary(id);
+        logger.info("End findCommentary");
+        return commentary;
     }
 
     @ExceptionHandler(VisitNotFoundException.class)
