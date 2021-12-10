@@ -3,7 +3,6 @@ package com.svalero.tripalbumapi.service;
 import com.svalero.tripalbumapi.controller.UserController;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
-import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.repository.UserRepository;
 import org.slf4j.Logger;
@@ -72,9 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Visit> findVisitsUser(long userId) throws UserNotFoundException {
+    public List<Place> findPlacesUser(long userId) throws UserNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        return userRepository.findVisitsUser(userId);
+        return userRepository.findPlacesUser(userId);
     }
 }
