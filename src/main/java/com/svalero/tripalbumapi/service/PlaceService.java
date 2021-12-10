@@ -17,4 +17,8 @@ public interface PlaceService {
     Place deletePlace(long id) throws PlaceNotFoundException;
     Place modifyPlace(long id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
     Place patchPlace(long id, String description) throws PlaceNotFoundException;
+
+    float averageRating(long placeId) throws PlaceNotFoundException;
+    int numVisits(long placeId) throws PlaceNotFoundException;
+    int numUsers(long placeId) throws PlaceNotFoundException;
 }

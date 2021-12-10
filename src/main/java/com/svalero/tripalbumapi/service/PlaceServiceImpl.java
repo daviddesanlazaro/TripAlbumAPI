@@ -7,6 +7,7 @@ import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
 import com.svalero.tripalbumapi.repository.PlaceRepository;
 import com.svalero.tripalbumapi.repository.ProvinceRepository;
+import com.svalero.tripalbumapi.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,8 @@ public class PlaceServiceImpl implements PlaceService {
     private PlaceRepository placeRepository;
     @Autowired
     private ProvinceRepository provinceRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Place> findAllPlaces() {
@@ -79,4 +82,24 @@ public class PlaceServiceImpl implements PlaceService {
         return placeRepository.save(place);
     }
 
+    @Override
+    public float averageRating(long placeId) throws PlaceNotFoundException {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
+        return placeRepository.averageRating(placeId);
+    }
+
+    @Override
+    public int numVisits(long placeId) throws PlaceNotFoundException {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
+        return placeRepository.numVisits(placeId);
+    }
+
+    @Override
+    public int numUsers(long placeId) throws PlaceNotFoundException {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(PlaceNotFoundException::new);
+        return placeRepository.numUsers(placeId);
+    }
 }
