@@ -825,6 +825,71 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "SQL",
+			"item": [
+				{
+					"name": "Valoración media de un lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/2/rating",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"2",
+								"rating"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Numero de visitas de un lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/2/numVisits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"2",
+								"numVisits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Usuarios únicos que han visitado un lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/2/numUsers",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"2",
+								"numUsers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

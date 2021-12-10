@@ -67,6 +67,7 @@ public class PlaceController {
         logger.info("End ModifyPlace " + id);
         return newPlace;
     }
+
     @GetMapping("/place/{placeId}/visits")
     public List<Visit> getVisitsByPlace(@PathVariable long placeId) throws PlaceNotFoundException {
         logger.info("Start getVisitsByPlace");
@@ -85,6 +86,30 @@ public class PlaceController {
         Place place = placeService.patchPlace(id, description);
         logger.info("End patchPlace " + id);
         return place;
+    }
+
+    @GetMapping("/place/{id}/rating")
+    public float averageRating(@PathVariable long id) throws PlaceNotFoundException {
+        logger.info("Start averageRating " + id);
+        float rating = placeService.averageRating(id);
+        logger.info("End averageRating " + id);
+        return rating;
+    }
+
+    @GetMapping("/place/{id}/numVisits")
+    public int numVisits(@PathVariable long id) throws PlaceNotFoundException {
+        logger.info("Start numVisits " + id);
+        int visits = placeService.numVisits(id);
+        logger.info("End numVisits " + id);
+        return visits;
+    }
+
+    @GetMapping("/place/{id}/numUsers")
+    public int numUsers(@PathVariable long id) throws PlaceNotFoundException {
+        logger.info("Start numUsers " + id);
+        int users = placeService.numUsers(id);
+        logger.info("End numUsers " + id);
+        return users;
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
@@ -106,5 +131,4 @@ public class PlaceController {
         ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
