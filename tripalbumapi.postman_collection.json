@@ -890,6 +890,26 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "JPQL Visitas de un usuario",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/user/1/visits",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"user",
+						"1",
+						"visits"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

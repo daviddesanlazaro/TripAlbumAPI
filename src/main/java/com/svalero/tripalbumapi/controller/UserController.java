@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.controller;
 
+import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
@@ -77,17 +78,17 @@ public class UserController {
         return newUser;
     }
 
-    @GetMapping("/user/{userId}/visits")
-    public List<Visit> getVisitsByUser(@PathVariable long userId) throws UserNotFoundException {
-        logger.info("Start getVisitsByUser");
-        List<Visit> visits = null;
-        logger.info("Search for user " + userId);
-        User user = userService.findUser(userId);
-        logger.info("User found. Search for visits");
-        visits = visitService.findVisitsByUser(user);
-        logger.info("End getVisitsByUser");
-        return visits;
-    }
+//    @GetMapping("/user/{userId}/visits")
+//    public List<Visit> getVisitsByUser(@PathVariable long userId) throws UserNotFoundException {
+//        logger.info("Start getVisitsByUser");
+//        List<Visit> visits = null;
+//        logger.info("Search for user " + userId);
+//        User user = userService.findUser(userId);
+//        logger.info("User found. Search for visits");
+//        visits = visitService.findVisitsByUser(user);
+//        logger.info("End getVisitsByUser");
+//        return visits;
+//    }
 
     @PatchMapping("/user/{id}")
     public User patchUser(@PathVariable long id, @RequestBody String email) throws UserNotFoundException {
@@ -97,6 +98,14 @@ public class UserController {
         return user;
     }
 
+    @GetMapping("/user/{userId}/visits")
+    public List<Visit> findVisitsUser(@PathVariable Integer userId) throws UserNotFoundException {
+        logger.info("Start findU " + userId);
+        List<Visit> places = userService.findVisitsUser(userId);
+        logger.info("End findU " + userId);
+        return places;
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
         ErrorResponse errorResponse = new ErrorResponse("1", unfe.getMessage());
@@ -104,9 +113,9 @@ public class UserController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler
+//    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+//        ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
+//        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }
