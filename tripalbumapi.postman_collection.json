@@ -243,14 +243,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/visit/66",
+							"raw": "localhost:8081/visit/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"66"
+								"1"
 							]
 						}
 					},
@@ -360,7 +360,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"date\": \"\",\r\n    \"rating\": 3.5,\r\n    \"comment\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 2\r\n}",
+							"raw": "{\r\n    \"date\": \"01-01-2021\",\r\n    \"rating\": 3.5,\r\n    \"commentary\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -602,7 +602,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"date\": \"\",\r\n    \"rating\": 2.5,\r\n    \"comment\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 2\r\n}",
+							"raw": "{\r\n    \"date\": \"05-05-2015\",\r\n    \"rating\": 2.5,\r\n    \"commentary\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -610,14 +610,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/visit/65",
+							"raw": "localhost:8081/visit/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"65"
+								"1"
 							]
 						}
 					},
@@ -699,14 +699,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/visit/11",
+							"raw": "localhost:8081/visit/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"11"
+								"1"
 							]
 						}
 					},
@@ -892,24 +892,80 @@
 			]
 		},
 		{
-			"name": "JPQL Visitas de un usuario",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "localhost:8081/user/1/visits",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"user",
-						"1",
-						"visits"
-					]
+			"name": "JPQL",
+			"item": [
+				{
+					"name": "Lugares visitados por un usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/1/places",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"1",
+								"places"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visitas recientes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "01-03-2020",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/visits/date",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"visits",
+								"date"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar comentario de una visita",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/visit/1/commentary",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"visit",
+								"1",
+								"commentary"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
