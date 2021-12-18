@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.service;
 
+import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 
@@ -14,4 +15,6 @@ public interface UserService {
     User deleteUser(long id) throws UserNotFoundException;
     User modifyUser(long id, User user) throws UserNotFoundException;
     User patchUser(long id, String email) throws UserNotFoundException;
+
+    List<Place> findPlacesUser(User user) throws UserNotFoundException ;
 }

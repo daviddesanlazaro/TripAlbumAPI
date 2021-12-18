@@ -25,6 +25,7 @@ public class CountryController {
     @Autowired
     private ProvinceService provinceService;
 
+    // Mostrar todos los países
     @GetMapping("/countries")
     public List<Country> getCountries() {
         logger.info("Start getCountries");
@@ -34,6 +35,7 @@ public class CountryController {
         return countries;
     }
 
+    // Mostrar un país por ID
     @GetMapping("/country/{id}")
     public Country getCountry(@PathVariable long id) throws CountryNotFoundException {
         logger.info("Start ShowCountry " + id);
@@ -42,6 +44,7 @@ public class CountryController {
         return country;
     }
 
+    // Eliminar un país
     @DeleteMapping("/country/{id}")
     public Country removeCountry(@PathVariable long id) throws CountryNotFoundException {
         logger.info("Start DeleteCountry " + id);
@@ -50,6 +53,7 @@ public class CountryController {
         return country;
     }
 
+    // Insertar un país
     @PostMapping("/countries")
     public Country addCountry(@RequestBody Country country) {
         logger.info("Start AddCountry");
@@ -58,6 +62,7 @@ public class CountryController {
         return newCountry;
     }
 
+    // Modificar un país
     @PutMapping("/country/{id}")
     public Country modifyCountry(@RequestBody Country country, @PathVariable long id) throws CountryNotFoundException {
         logger.info("Start ModifyCountry " + id);
@@ -66,6 +71,7 @@ public class CountryController {
         return newCountry;
     }
 
+    // Mostrar todas las provincias de un país
     @GetMapping("/country/{countryId}/provinces")
     public List<Province> getProvinces(@PathVariable long countryId) throws CountryNotFoundException {
         logger.info("Start getProvincesByCountry");
@@ -78,6 +84,7 @@ public class CountryController {
         return provinces;
     }
 
+    // Cambiar el nombre de un país
     @PatchMapping("/country/{id}")
     public Country patchCountry(@PathVariable long id, @RequestBody String name) throws CountryNotFoundException {
         logger.info("Start PatchCountry " + id);

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -21,6 +23,7 @@ public class VisitController {
     @Autowired
     private VisitService visitService;
 
+    // Mostrar todas las visitas
     @GetMapping("/visits")
     public List<Visit> getVisits() {
         logger.info("Start getVisits");
@@ -31,6 +34,7 @@ public class VisitController {
         return visits;
     }
 
+    // Mostrar una visita por ID
     @GetMapping("/visit/{id}")
     public Visit getVisit(@PathVariable long id) throws VisitNotFoundException {
         logger.info("Start ShowVisit " + id);
@@ -39,6 +43,7 @@ public class VisitController {
         return visit;
     }
 
+    // Eliminar una visita
     @DeleteMapping("/visit/{id}")
     public Visit removeVisit(@PathVariable long id) throws VisitNotFoundException {
         logger.info("Start DeleteVisit " + id);
@@ -47,6 +52,7 @@ public class VisitController {
         return visit;
     }
 
+    // Insertar una visita
     @PostMapping("/visits")
     public Visit addVisit(@RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
         logger.info("Start AddVisit");
@@ -55,6 +61,7 @@ public class VisitController {
         return visit;
     }
 
+    // Modificar una visita
     @PutMapping("/visit/{id}")
     public Visit modifyVisit(@RequestBody VisitDTO visitDto, @PathVariable long id) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
         logger.info("Start ModifyVisit " + id);
@@ -63,12 +70,34 @@ public class VisitController {
         return newVisit;
     }
 
+    // Cambiar el comentario de una visita. JPQL
     @PatchMapping("/visit/{id}")
     public Visit patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
         logger.info("Start PatchVisit " + id);
         Visit visit = visitService.patchVisit(id, commentary);
         logger.info("End patchVisit " + id);
         return visit;
+    }
+
+    // Mostrar las visitas realizadas después de una fecha determinada. JPQL
+    @GetMapping("/visits/date")
+    public List<Visit> findRecentVisits(@RequestBody String date) {
+        logger.info("Start findRecentVisits. Convert date");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDate = LocalDate.parse(date, dtf);
+        logger.info("Date converted");
+        List<Visit> visits = visitService.findRecentVisits(localDate);
+        logger.info("End findRecentVisits");
+        return visits;
+    }
+
+    // Mostrar el comentario realizado sobre una visita. JPQL
+    @GetMapping("/visit/{id}/commentary")
+    public String findCommentary(@PathVariable long id) throws VisitNotFoundException {
+        logger.info("Start findCommentary");
+        String commentary = visitService.findCommentary(id);
+        logger.info("End findCommentary");
+        return commentary;
     }
 
     @ExceptionHandler(VisitNotFoundException.class)

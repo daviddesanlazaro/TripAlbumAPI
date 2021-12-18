@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.controller;
 
+import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
@@ -25,6 +26,7 @@ public class UserController {
     @Autowired
     private VisitService visitService;
 
+    // Mostrar usuarios. Los parámetros permiten filtar por nombre, apellido o email
     @GetMapping("/users")
     public List<User> getUsers(
             @RequestParam(name = "send_data", required = false) boolean sendData,
@@ -45,6 +47,7 @@ public class UserController {
         return users;
     }
 
+    // Mostrar un usuario por ID
     @GetMapping("/user/{id}")
     public User getUser(@PathVariable long id) throws UserNotFoundException {
         logger.info("Start ShowUser " + id);
@@ -53,6 +56,7 @@ public class UserController {
         return user;
     }
 
+    // Eliminar un usuario
     @DeleteMapping("/user/{id}")
     public User removeUser(@PathVariable long id) throws UserNotFoundException {
         logger.info("Start DeleteUser " + id);
@@ -61,6 +65,7 @@ public class UserController {
         return user;
     }
 
+    // Insertar un usuario
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         logger.info("Start AddUser");
@@ -69,6 +74,7 @@ public class UserController {
         return newUser;
     }
 
+    // Modificar un usuario
     @PutMapping("/user/{id}")
     public User modifyUser(@RequestBody User user, @PathVariable long id) throws UserNotFoundException {
         logger.info("Start ModifyUser " + id);
@@ -77,6 +83,7 @@ public class UserController {
         return newUser;
     }
 
+    // Mostrar todas las visitas de un usuario
     @GetMapping("/user/{userId}/visits")
     public List<Visit> getVisitsByUser(@PathVariable long userId) throws UserNotFoundException {
         logger.info("Start getVisitsByUser");
@@ -89,12 +96,25 @@ public class UserController {
         return visits;
     }
 
+    // Cambiar el email de un usuario
     @PatchMapping("/user/{id}")
     public User patchUser(@PathVariable long id, @RequestBody String email) throws UserNotFoundException {
         logger.info("Start PatchUser " + id);
         User user = userService.patchUser(id, email);
         logger.info("End patchUser " + id);
         return user;
+    }
+
+    // Mostrar los lugares que ha visitado un usuario. JPQL
+    @GetMapping("/user/{userId}/places")
+    public List<Place> findPlacesUser(@PathVariable long userId) throws UserNotFoundException {
+        logger.info("Start findPlacesUser " + userId);
+        User user = new User();
+        user.setId(userId);
+        logger.info("User created");
+        List<Place> places = userService.findPlacesUser(user);
+        logger.info("End findPlacesUser " + userId);
+        return places;
     }
 
     @ExceptionHandler(UserNotFoundException.class)

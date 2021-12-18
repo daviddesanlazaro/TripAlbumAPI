@@ -27,6 +27,7 @@ public class ProvinceController {
     @Autowired
     private PlaceService placeService;
 
+    // Mostrar todas las provincias
     @GetMapping("/provinces")
     public List<Province> getProvinces() {
         logger.info("Start getProvinces");
@@ -37,6 +38,7 @@ public class ProvinceController {
         return provinces;
     }
 
+    // Mostrar una provincia por ID
     @GetMapping("/province/{id}")
     public Province getProvince(@PathVariable long id) throws ProvinceNotFoundException {
         logger.info("Start ShowProvince " + id);
@@ -45,6 +47,7 @@ public class ProvinceController {
         return province;
     }
 
+    // Eliminar una provincia
     @DeleteMapping("/province/{id}")
     public Province removeProvince(@PathVariable long id) throws ProvinceNotFoundException {
         logger.info("Start DeleteProvince " + id);
@@ -53,6 +56,7 @@ public class ProvinceController {
         return province;
     }
 
+    // Insertar una provincia
     @PostMapping("/provinces")
     public Province addProvince(@RequestBody ProvinceDTO provinceDto) throws CountryNotFoundException {
         logger.info("Start AddProvince");
@@ -61,6 +65,7 @@ public class ProvinceController {
         return province;
     }
 
+    // Modificar una provincia
     @PutMapping("/province/{id}")
     public Province modifyProvince(@RequestBody ProvinceDTO provinceDto, @PathVariable long id) throws ProvinceNotFoundException, CountryNotFoundException {
         logger.info("Start ModifyProvince " + id);
@@ -69,6 +74,7 @@ public class ProvinceController {
         return newProvince;
     }
 
+    // Mostrar todos los lugares de una provincia
     @GetMapping("/province/{provinceId}/places")
     public List<Place> getPlaces(@PathVariable long provinceId) throws ProvinceNotFoundException {
         logger.info("Start getPlacesByProvince");
@@ -81,6 +87,7 @@ public class ProvinceController {
         return places;
     }
 
+    // Cambiar el nombre de una provincia
     @PatchMapping("/province/{id}")
     public Province patchProvince(@PathVariable long id, @RequestBody String name) throws ProvinceNotFoundException {
         logger.info("Start PatchProvince " + id);

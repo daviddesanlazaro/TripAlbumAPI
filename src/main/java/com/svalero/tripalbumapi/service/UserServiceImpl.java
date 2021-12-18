@@ -1,8 +1,12 @@
 package com.svalero.tripalbumapi.service;
 
+import com.svalero.tripalbumapi.controller.UserController;
+import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +14,8 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -62,5 +68,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
         user.setEmail(email);
         return userRepository.save(user);
+    }
+
+    @Override
+    public List<Place> findPlacesUser(User user) throws UserNotFoundException {
+        user = userRepository.findById(user.getId())
+                .orElseThrow(UserNotFoundException::new);
+        return userRepository.findPlacesUser(user);
     }
 }
