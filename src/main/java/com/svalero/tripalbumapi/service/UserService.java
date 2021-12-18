@@ -16,5 +16,5 @@ public interface UserService {
     User modifyUser(long id, User user) throws UserNotFoundException;
     User patchUser(long id, String email) throws UserNotFoundException;
 
-    List<Place> findPlacesUser(long userId) throws UserNotFoundException ;
+    List<Place> findPlacesUser(User user) throws UserNotFoundException ;
 }

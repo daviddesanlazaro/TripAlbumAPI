@@ -71,9 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Place> findPlacesUser(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId)
+    public List<Place> findPlacesUser(User user) throws UserNotFoundException {
+        user = userRepository.findById(user.getId())
                 .orElseThrow(UserNotFoundException::new);
-        return userRepository.findPlacesUser(userId);
+        return userRepository.findPlacesUser(user);
     }
 }

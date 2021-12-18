@@ -18,9 +18,11 @@ public interface VisitRepository extends CrudRepository<Visit, Long>  {
     List<Visit> findByUser(User user);
     List<Visit> findByPlace(Place place);
 
-    @Query(value = "SELECT v FROM visits v WHERE date >= :date")
+    // Mostrar las visitas realizadas después de una fecha determinada
+    @Query("SELECT v FROM Visit v WHERE date >= :date")
     List<Visit> findRecentVisits(@Param("date") LocalDate localDate);
 
-    @Query(value = "SELECT commentary FROM visits v WHERE id = ?1")
-    String findCommentary(long id) throws VisitNotFoundException;
+    // Mostrar el comentario realizado sobre una visita
+    @Query("SELECT commentary FROM Visit v WHERE id = :id")
+    String findCommentary(@Param("id") long id) throws VisitNotFoundException;
 }

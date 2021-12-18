@@ -27,6 +27,7 @@ public class PlaceController {
     @Autowired
     private VisitService visitService;
 
+    // Mostrar todos los lugares
     @GetMapping("/places")
     public List<Place> getPlaces() {
         logger.info("Start getPlaces");
@@ -36,6 +37,7 @@ public class PlaceController {
         return places;
     }
 
+    // Mostrar un lugar por ID
     @GetMapping("/place/{id}")
     public Place getPlace(@PathVariable long id) throws PlaceNotFoundException {
         logger.info("Start ShowPlace " + id);
@@ -44,6 +46,7 @@ public class PlaceController {
         return place;
     }
 
+    // Eliminar un lugar
     @DeleteMapping("/place/{id}")
     public Place removePlace(@PathVariable long id) throws PlaceNotFoundException {
         logger.info("Start DeletePlace " + id);
@@ -52,6 +55,7 @@ public class PlaceController {
         return place;
     }
 
+    // Insertar un lugar
     @PostMapping("/places")
     public Place addPlace(@RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
         logger.info("Start AddPlace");
@@ -60,6 +64,7 @@ public class PlaceController {
         return place;
     }
 
+    // Modificar un lugar
     @PutMapping("/place/{id}")
     public Place modifyPlace(@RequestBody PlaceDTO placeDto, @PathVariable long id) throws PlaceNotFoundException, ProvinceNotFoundException {
         logger.info("Start ModifyPlace " + id);
@@ -68,6 +73,7 @@ public class PlaceController {
         return newPlace;
     }
 
+    // Mostrar todas las visitas de un lugar
     @GetMapping("/place/{placeId}/visits")
     public List<Visit> getVisitsByPlace(@PathVariable long placeId) throws PlaceNotFoundException {
         logger.info("Start getVisitsByPlace");
@@ -80,6 +86,7 @@ public class PlaceController {
         return visits;
     }
 
+    // Cambiar la descripción de un lugar
     @PatchMapping("/place/{id}")
     public Place patchPlace(@PathVariable long id, @RequestBody String description) throws PlaceNotFoundException {
         logger.info("Start PatchPlace " + id);
@@ -88,6 +95,7 @@ public class PlaceController {
         return place;
     }
 
+    // Mostrar la valoración media de un lugar. SQL
     @GetMapping("/place/{id}/rating")
     public float averageRating(@PathVariable long id) throws PlaceNotFoundException {
         logger.info("Start averageRating " + id);
@@ -96,6 +104,7 @@ public class PlaceController {
         return rating;
     }
 
+    // Contar las visitas totales de un lugar. SQL
     @GetMapping("/place/{id}/numVisits")
     public int numVisits(@PathVariable long id) throws PlaceNotFoundException {
         logger.info("Start numVisits " + id);
@@ -104,6 +113,7 @@ public class PlaceController {
         return visits;
     }
 
+    // Contar los usuarios únicos que han visitado un lugar. SQL
     @GetMapping("/place/{id}/numUsers")
     public int numUsers(@PathVariable long id) throws PlaceNotFoundException {
         logger.info("Start numUsers " + id);
