@@ -3,7 +3,9 @@ package com.svalero.tripalbumapi.controller;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
+import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
+import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.service.UserService;
 import com.svalero.tripalbumapi.service.VisitService;
@@ -115,6 +117,23 @@ public class UserController {
         List<Place> places = userService.findPlacesUser(user);
         logger.info("End findPlacesUser " + userId);
         return places;
+    }
+
+    // Mostrar las visitas realizadas por un usuario determinado a un lugar determinado
+    @GetMapping("/user/place/visits")
+    public List<Visit> findByUserAndPlace(@RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
+        logger.info("Start findByUserAndPlace");
+        List<Visit> visits = visitService.findByUserAndPlace(visitDto);
+        logger.info("End findByUserAndPlace");
+        return visits;
+    }
+
+    // Eliminar todas las visitas de un usuario con menor valoración que la determinada. JPQL
+    @DeleteMapping("user/visits")
+    public void deleteByUserDate(@RequestBody VisitDTO visitDto) throws UserNotFoundException {
+        logger.info("Start deleteByUserRating");
+        visitService.deleteByUserRating(visitDto);
+        logger.info("End deleteByUserRating");
     }
 
     @ExceptionHandler(UserNotFoundException.class)

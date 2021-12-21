@@ -1,5 +1,6 @@
 package com.svalero.tripalbumapi.controller;
 
+import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.*;

@@ -104,4 +104,27 @@ public class VisitServiceImpl implements VisitService {
                 .orElseThrow(VisitNotFoundException::new);
         return visitRepository.findCommentary(id);
     }
+
+    @Override
+    public List<Visit> findByUserAndPlace(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
+        User user = userRepository.findById(visitDto.getUser())
+                .orElseThrow(UserNotFoundException::new);
+        Place place = placeRepository.findById(visitDto.getPlace())
+                .orElseThrow(PlaceNotFoundException::new);
+        return visitRepository.findByUserAndPlace(user, place);
+    }
+
+    @Override
+    public List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException {
+        Place place = placeRepository.findById(visitDto.getPlace())
+                .orElseThrow(PlaceNotFoundException::new);
+        return visitRepository.findByPlaceRating(place, visitDto.getRating());
+    }
+
+    @Override
+    public void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException {
+        User user = userRepository.findById(visitDto.getUser())
+                .orElseThrow(UserNotFoundException::new);
+        visitRepository.deleteByUserRating(user, visitDto.getRating());
+    }
 }

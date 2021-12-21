@@ -102,4 +102,11 @@ public class PlaceServiceImpl implements PlaceService {
                 .orElseThrow(PlaceNotFoundException::new);
         return placeRepository.numUsers(placeId);
     }
+
+    @Override
+    public List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException {
+        Province province = provinceRepository.findById(placeDto.getProvince())
+                .orElseThrow(ProvinceNotFoundException::new);
+        return placeRepository.findByProvinceLatitude(province, placeDto.getLatitude());
+    }
 }

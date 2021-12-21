@@ -3,6 +3,7 @@ package com.svalero.tripalbumapi.controller;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
+import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
@@ -120,6 +121,15 @@ public class PlaceController {
         int users = placeService.numUsers(id);
         logger.info("End numUsers " + id);
         return users;
+    }
+
+    // Mostrar visitas a un lugar con mejor valoración que la determinada. JPQL
+    @GetMapping("/place/visits/rating")
+    public List<Visit> findByPlaceRating(@RequestBody VisitDTO visitDto) throws PlaceNotFoundException {
+        logger.info("Start findByPlaceRating");
+        List<Visit> visits = visitService.findByPlaceRating(visitDto);
+        logger.info("End findByPlaceRating");
+        return visits;
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)

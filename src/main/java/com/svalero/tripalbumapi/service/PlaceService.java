@@ -21,4 +21,6 @@ public interface PlaceService {
     float averageRating(long placeId) throws PlaceNotFoundException;
     int numVisits(long placeId) throws PlaceNotFoundException;
     int numUsers(long placeId) throws PlaceNotFoundException;
+
+    List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException;
 }
