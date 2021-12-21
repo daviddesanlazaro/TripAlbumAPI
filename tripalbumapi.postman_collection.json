@@ -6,88 +6,8 @@
 	},
 	"item": [
 		{
-			"name": "GET",
+			"name": "GET ALL",
 			"item": [
-				{
-					"name": "Consulta provincias por país",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/country/1/provinces",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"1",
-								"provinces"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta lugares por provincia",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/province/1/places",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"1",
-								"places"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta visitas por usuario",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/1/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"1",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta visitas por lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/2/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Consultar usuarios",
 					"request": {
@@ -198,64 +118,12 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Consultar lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/34",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"34"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar usuario",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/33",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"33"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar visita",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/visit/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"visit",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "GET BY ID",
+			"item": [
 				{
 					"name": "Consultar país",
 					"request": {
@@ -289,6 +157,148 @@
 							"path": [
 								"province",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/33",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"33"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/34",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar visita",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/visit/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"visit",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET BY PARENT",
+			"item": [
+				{
+					"name": "Consulta provincias por país",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/country/1/provinces",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"1",
+								"provinces"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta visitas por lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/2/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"2",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta visitas por usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/2/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"2",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consulta lugares por provincia",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/province/1/places",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"1",
+								"places"
 							]
 						}
 					},
@@ -333,7 +343,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Lugar2\",\r\n    \"description\": \"Lugar de prueba 2\",\r\n    \"latitude\": 50.7,\r\n    \"longitude\": 16.3,\r\n    \"provinceId\": 2\r\n}",
+							"raw": "{\r\n    \"name\": \"Lugar2\",\r\n    \"description\": \"Lugar de prueba 2\",\r\n    \"latitude\": 50.7,\r\n    \"longitude\": 16.3,\r\n    \"province\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -960,6 +970,135 @@
 								"visit",
 								"1",
 								"commentary"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Endpoints con DTOs",
+			"item": [
+				{
+					"name": "Mostrar visitas por usuario y lugar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": 2,\r\n    \"place\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/user/place/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"place",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar visitas por lugar y valoración",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rating\": 4.5,\r\n    \"place\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/place/visits/rating",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"visits",
+								"rating"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar visitas de un usuario antes de una fecha",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": 2,\r\n    \"rating\": 0.5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/user/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar lugares de una provincia con mayor latitud",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"latitude\": 60,\r\n    \"province\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/province/places/latitude",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"places",
+								"latitude"
 							]
 						}
 					},
