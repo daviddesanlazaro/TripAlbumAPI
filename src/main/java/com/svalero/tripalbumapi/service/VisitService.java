@@ -22,4 +22,8 @@ public interface VisitService {
 
     List<Visit> findRecentVisits(LocalDate localDate);
     String findCommentary(long id) throws VisitNotFoundException;
+
+    List<Visit> findByUserAndPlace(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException;
+    List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException;
+    void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException;
 }

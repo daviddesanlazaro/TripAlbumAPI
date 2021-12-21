@@ -2,6 +2,7 @@ package com.svalero.tripalbumapi.controller;
 
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.Province;
+import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
 import com.svalero.tripalbumapi.domain.dto.ProvinceDTO;
 import com.svalero.tripalbumapi.exception.CountryNotFoundException;
 import com.svalero.tripalbumapi.exception.ErrorResponse;
@@ -94,6 +95,15 @@ public class ProvinceController {
         Province province = provinceService.patchProvince(id, name);
         logger.info("End patchProvince " + id);
         return province;
+    }
+
+    // Mostrar lugares de una provincia con mayor latitud que la determinada. JPQL
+    @GetMapping("/province/places/latitude")
+    public List<Place> findByProvinceLatitude(@RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
+        logger.info("Start findByProvinceLatitude");
+        List<Place> places = placeService.findByProvinceLatitude(placeDto);
+        logger.info("End findByProvinceLatitude");
+        return places;
     }
 
     @ExceptionHandler(ProvinceNotFoundException.class)

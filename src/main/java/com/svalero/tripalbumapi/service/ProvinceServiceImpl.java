@@ -78,5 +78,4 @@ public class ProvinceServiceImpl implements ProvinceService {
         province.setName(name);
         return provinceRepository.save(province);
     }
-
 }
