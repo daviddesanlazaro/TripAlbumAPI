@@ -15,17 +15,23 @@ import java.util.List;
 @Table(name = "users")
 
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column
     private String name;
+
     @Column
     private String surname;
+
     @Column
     private String email;
+
     @Column
     private String phone;
+
     @Column(name = "send_data")
     private boolean sendData;
 
