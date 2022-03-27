@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -21,10 +22,12 @@ public class Province {
     private long id;
 
     @Column
+    @NotNull
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "country_id")
+    @NotNull
     private Country country;
 
     @OneToMany(mappedBy = "province")

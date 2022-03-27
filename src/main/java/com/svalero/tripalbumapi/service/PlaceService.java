@@ -14,13 +14,13 @@ public interface PlaceService {
     Place findPlace(long id) throws PlaceNotFoundException;
 
     Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException;
-    Place deletePlace(long id) throws PlaceNotFoundException;
+    void deletePlace(long id) throws PlaceNotFoundException;
     Place modifyPlace(long id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
     Place patchPlace(long id, String description) throws PlaceNotFoundException;
 
     float averageRating(long placeId) throws PlaceNotFoundException;
     int numVisits(long placeId) throws PlaceNotFoundException;
-    int numUsers(long placeId) throws PlaceNotFoundException;
+//    int numUsers(long placeId) throws PlaceNotFoundException;
 
-    List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException;
+//    List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException;
 }

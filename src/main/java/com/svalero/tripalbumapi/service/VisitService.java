@@ -6,7 +6,6 @@ import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface VisitService {
@@ -16,14 +15,14 @@ public interface VisitService {
     Visit findVisit(long id) throws VisitNotFoundException;
 
     Visit addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException;
-    Visit deleteVisit(long id) throws VisitNotFoundException;
+    void deleteVisit(long id) throws VisitNotFoundException;
     Visit modifyVisit(long id, VisitDTO visitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException;
     Visit patchVisit(long id, String commentary) throws VisitNotFoundException;
 
-    List<Visit> findRecentVisits(LocalDate localDate);
-    String findCommentary(long id) throws VisitNotFoundException;
+//    List<Visit> findRecentVisits(LocalDate localDate);
+//    String findCommentary(long id) throws VisitNotFoundException;
 
-    List<Visit> findByUserAndPlace(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException;
-    List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException;
-    void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException;
+    List<Visit> findByUserAndPlace(long userId, long placeId) throws UserNotFoundException, PlaceNotFoundException;
+//    List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException;
+//    void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException;
 }

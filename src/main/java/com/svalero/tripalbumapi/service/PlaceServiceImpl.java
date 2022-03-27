@@ -52,11 +52,10 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Place deletePlace(long id) throws PlaceNotFoundException {
+    public void deletePlace(long id) throws PlaceNotFoundException {
         Place place = placeRepository.findById(id)
                 .orElseThrow(PlaceNotFoundException::new);
         placeRepository.delete(place);
-        return place;
     }
 
     @Override
@@ -96,17 +95,17 @@ public class PlaceServiceImpl implements PlaceService {
         return placeRepository.numVisits(placeId);
     }
 
-    @Override
-    public int numUsers(long placeId) throws PlaceNotFoundException {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
-        return placeRepository.numUsers(placeId);
-    }
+//    @Override
+//    public int numUsers(long placeId) throws PlaceNotFoundException {
+//        Place place = placeRepository.findById(placeId)
+//                .orElseThrow(PlaceNotFoundException::new);
+//        return placeRepository.numUsers(placeId);
+//    }
 
-    @Override
-    public List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException {
-        Province province = provinceRepository.findById(placeDto.getProvince())
-                .orElseThrow(ProvinceNotFoundException::new);
-        return placeRepository.findByProvinceLatitude(province, placeDto.getLatitude());
-    }
+//    @Override
+//    public List<Place> findByProvinceLatitude(PlaceDTO placeDto) throws ProvinceNotFoundException {
+//        Province province = provinceRepository.findById(placeDto.getProvince())
+//                .orElseThrow(ProvinceNotFoundException::new);
+//        return placeRepository.findByProvinceLatitude(province, placeDto.getLatitude());
+//    }
 }

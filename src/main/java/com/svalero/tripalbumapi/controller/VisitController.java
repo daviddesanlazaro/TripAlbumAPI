@@ -1,20 +1,23 @@
 package com.svalero.tripalbumapi.controller;
 
-import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.*;
 import com.svalero.tripalbumapi.service.VisitService;
+import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class VisitController {
@@ -26,105 +29,147 @@ public class VisitController {
 
     // Mostrar todas las visitas
     @GetMapping("/visits")
-    public List<Visit> getVisits() {
+    public ResponseEntity<?> getVisits() {
         logger.info("Start getVisits");
         List<Visit> visits;
 
         visits = visitService.findAllVisits();
         logger.info("End getVisits");
-        return visits;
+        return ResponseEntity.ok(visits);
     }
 
     // Mostrar una visita por ID
     @GetMapping("/visit/{id}")
-    public Visit getVisit(@PathVariable long id) throws VisitNotFoundException {
+    public ResponseEntity<?> getVisit(@PathVariable long id) throws VisitNotFoundException {
         logger.info("Start ShowVisit " + id);
         Visit visit = visitService.findVisit(id);
         logger.info("End ShowVisit " + id);
-        return visit;
+        return ResponseEntity.ok(visit);
     }
 
     // Eliminar una visita
     @DeleteMapping("/visit/{id}")
-    public Visit removeVisit(@PathVariable long id) throws VisitNotFoundException {
+    public void removeVisit(@PathVariable long id) throws VisitNotFoundException {
         logger.info("Start DeleteVisit " + id);
-        Visit visit = visitService.deleteVisit(id);
+        visitService.deleteVisit(id);
         logger.info("End DeleteVisit " + id);
-        return visit;
     }
 
     // Insertar una visita
     @PostMapping("/visits")
-    public Visit addVisit(@RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
+    public ResponseEntity<?> addVisit(@Valid @RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
         logger.info("Start AddVisit");
+
+//        if (((visitDto.getDate() == null) || (visitDto.getUser() == 0)) || (visitDto.getPlace() == 0)) {
+//            String error = "Los siguientes campos son incorrectos:";
+//            if (visitDto.getDate() == null)
+//                error = error + " Fecha";
+//            if (visitDto.getUser() == 0)
+//                error = error + " Usuario";
+//            if (visitDto.getPlace() == 0)
+//                error = error + " Lugar";
+//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
+//        }
+//        logger.info("Request accepted");
+
         Visit visit = visitService.addVisit(visitDto);
         logger.info("End AddVisit");
-        return visit;
+        return ResponseEntity.ok(visit);
     }
 
     // Modificar una visita
     @PutMapping("/visit/{id}")
-    public Visit modifyVisit(@RequestBody VisitDTO visitDto, @PathVariable long id) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
+    public ResponseEntity<?> modifyVisit(@Valid @RequestBody VisitDTO visitDto, @PathVariable long id) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
         logger.info("Start ModifyVisit " + id);
+        if (visitDto.getCommentary() == null)
+            visitDto.setCommentary("");
+
+//        if (((visitDto.getDate() == null) || (visitDto.getUser() == 0)) || (visitDto.getPlace() == 0)) {
+//            String error = "Los siguientes campos son incorrectos:";
+//            if (visitDto.getDate() == null)
+//                error = error + " Fecha";
+//            if (visitDto.getUser() == 0)
+//                error = error + " Usuario";
+//            if (visitDto.getPlace() == 0)
+//                error = error + " Lugar";
+//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
+//        }
+//        logger.info("Request accepted");
+
         Visit newVisit = visitService.modifyVisit(id, visitDto);
         logger.info("End ModifyVisit " + id);
-        return newVisit;
+        return ResponseEntity.ok(newVisit);
     }
 
     // Cambiar el comentario de una visita. JPQL
     @PatchMapping("/visit/{id}")
-    public Visit patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
+    public ResponseEntity<?> patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
         logger.info("Start PatchVisit " + id);
+
+//        if (commentary == null)
+//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("El comentario no es correcto"));
+//        logger.info("Request accepted");
+
         Visit visit = visitService.patchVisit(id, commentary);
         logger.info("End patchVisit " + id);
-        return visit;
+        return ResponseEntity.ok(visit);
     }
 
-    // Mostrar las visitas realizadas después de una fecha determinada. JPQL
-    @GetMapping("/visits/date")
-    public List<Visit> findRecentVisits(@RequestBody String date) {
-        logger.info("Start findRecentVisits. Convert date");
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate localDate = LocalDate.parse(date, dtf);
-        logger.info("Date converted");
-        List<Visit> visits = visitService.findRecentVisits(localDate);
-        logger.info("End findRecentVisits");
-        return visits;
+//    // Mostrar las visitas realizadas después de una fecha determinada. JPQL
+//    @GetMapping("/visits/date")
+//    public List<Visit> findRecentVisits(@RequestBody String date) {
+//        logger.info("Start findRecentVisits. Convert date");
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//        LocalDate localDate = LocalDate.parse(date, dtf);
+//        logger.info("Date converted");
+//        List<Visit> visits = visitService.findRecentVisits(localDate);
+//        logger.info("End findRecentVisits");
+//        return visits;
+//    }
+
+//    // Mostrar el comentario realizado sobre una visita. JPQL
+//    @GetMapping("/visit/{id}/commentary")
+//    public ResponseEntity<?> findCommentary(@PathVariable long id) throws VisitNotFoundException {
+//        logger.info("Start findCommentary");
+//        String commentary = visitService.findCommentary(id);
+//        logger.info("End findCommentary");
+//        return ResponseEntity.ok(commentary);
+//    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        Map<String, String> errors = new HashMap<>();
+        manve.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errors.put(fieldName, message);
+        });
+        return ResponseEntity.badRequest().body(ErrorResponse.validationError(errors));
     }
 
-    // Mostrar el comentario realizado sobre una visita. JPQL
-    @GetMapping("/visit/{id}/commentary")
-    public String findCommentary(@PathVariable long id) throws VisitNotFoundException {
-        logger.info("Start findCommentary");
-        String commentary = visitService.findCommentary(id);
-        logger.info("End findCommentary");
-        return commentary;
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(VisitNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleVisitNotFoundException(VisitNotFoundException vnfe) {
-        ErrorResponse errorResponse = new ErrorResponse("1", vnfe.getMessage());
-        logger.info(vnfe.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(vnfe.getMessage()));
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
-        ErrorResponse errorResponse = new ErrorResponse("1", pnfe.getMessage());
-        logger.info(pnfe.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
-        ErrorResponse errorResponse = new ErrorResponse("1", unfe.getMessage());
-        logger.info(unfe.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+        return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(unfe.getMessage()));
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
-        ErrorResponse errorResponse = new ErrorResponse("999", "Internal server error");
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

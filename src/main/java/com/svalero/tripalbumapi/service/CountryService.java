@@ -10,8 +10,7 @@ public interface CountryService {
     Country findCountry(long id) throws CountryNotFoundException;
 
     Country addCountry(Country country);
-    Country deleteCountry(long id) throws CountryNotFoundException;
+    void deleteCountry(long id) throws CountryNotFoundException;
     Country modifyCountry(long id, Country country) throws CountryNotFoundException;
-    Country patchCountry(long id, String name) throws CountryNotFoundException;
-
+//    Country patchCountry(long id, String name) throws CountryNotFoundException;
 }

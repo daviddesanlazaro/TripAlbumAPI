@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -21,19 +22,24 @@ public class Place {
     private long id;
 
     @Column
+    @NotNull
     private String name;
 
     @Column
+    @NotNull
     private String description;
 
     @Column
+    @NotNull
     private float latitude;
 
     @Column
+    @NotNull
     private float longitude;
 
     @ManyToOne
     @JoinColumn(name = "province_id")
+    @NotNull
     private Province province;
 
     @OneToMany(mappedBy = "place")
