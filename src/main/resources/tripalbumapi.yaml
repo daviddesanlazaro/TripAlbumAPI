@@ -1,0 +1,1489 @@
+openapi: 3.0.2
+servers:
+  - url: /tripalbum
+info:
+  title: TripAlbum API
+  description: API para la aplicación TripAlbum.
+  version: "1.0"
+tags:
+  - name: users
+    description: Operaciones con usuarios.
+  - name: visits
+    description: Operaciones con visitas.
+  - name: places
+    description: Operaciones con lugares.
+  - name: provinces
+    description: Operaciones con provincias.
+  - name: countries
+    description: Operaciones con países.
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Lista de usuarios
+      description: Mostrar la lista de usuarios. Permite filtrar por nombre o apellido.
+      operationId: getUsers
+      parameters:
+        - name: name
+          in: query
+          description: Nombre del usuario
+          required: false
+          schema:
+            type: string
+            example: Antonio
+            default: null        
+        - name: surname
+          in: query
+          description: Apellido del usuario
+          required: false
+          schema:
+            type: string
+            example: García
+            default: null
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:      
+      tags:
+        - users
+      summary: Insertar un usuario
+      description: Añadir un nuevo usuario a la lista.
+      operationId: postUsers
+      requestBody:
+        description: Crea un nuevo usuario
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/UserIn'
+      responses:
+        '201':
+          description: Se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /user/{userId}:
+    get:
+      tags:
+        - users
+      summary: Mostrar un usuario
+      description: Mostrar la información de un usuario determinado por su ID.
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - users
+      summary: Eliminar un usuario
+      description: Eliminar la información de un usuario determinado por su ID.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - users
+      summary: Modificar un usuario
+      description: Modificar la información de un usuario determinado por su ID.
+      operationId: modifyUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevos datos del usuario
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/UserIn'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    patch:
+      tags:
+        - users
+      summary: Modificar el email de un usuario
+      description: Modificar el email de un usuario determinado por su ID.
+      operationId: patchUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevo email
+        required: true
+        content:
+         application/json:
+          schema:
+            type: string
+            example: "nuevo@email.com"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /user/{userId}/visits:
+    get:
+      tags:
+        - users
+        - visits
+      summary: Mostrar las visitas de un usuario
+      description: Mostrar la información de las visitas realizadas por un usuario determinado por su ID.
+      operationId: getUserVisits
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visit'
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /user/{userId}/places:
+    get:
+      tags:
+        - users
+        - places
+      summary: Mostrar lugares visitados por un usuario
+      description: Mostrar todos los lugares que ha visitado un usuario determinado por su ID.
+      operationId: getUserPlaces
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Place'
+        '404':
+          description: No se ha encontrado el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /user/{userId}/place/{placeId}/visits:
+    get:
+      tags:
+        - users
+        - places
+        - visits
+      summary: Mostrar visitas de un usuario a un lugar
+      description: Mostrar todas las visitas que un usuario ha realizado a un lugar determinado.
+      operationId: getUserPlaceVisits
+      parameters:
+        - name: userId
+          in: path
+          description: Id del usuario
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visit'
+        '404':
+          description: No se ha encontrado el usuario o el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /visits:
+    get:
+      tags:
+        - visits
+      summary: Lista de visitas
+      description: Mostrar todas las visitas.
+      operationId: getVisits
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visit'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:      
+      tags:
+        - visits
+      summary: Insertar una visita
+      description: Añadir una nueva visita a la lista.
+      operationId: postVisits
+      requestBody:
+        description: Crea una nueva visita
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/VisitIn'
+      responses:
+        '201':
+          description: Se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /visit/{visitId}:
+    get:
+      tags:
+        - visits
+      summary: Mostrar una visita
+      description: Mostrar la información de una visita determinada por su ID.
+      operationId: getVisit
+      parameters:
+        - name: visitId
+          in: path
+          description: Id de la visit
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '404':
+          description: No se ha encontrado la visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - visits
+      summary: Eliminar una visita
+      description: Eliminar la información de una visita determinada por su ID.
+      operationId: deleteVisit
+      parameters:
+        - name: visitId
+          in: path
+          description: Id de la visita
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: No se ha encontrado la visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - visits
+      summary: Modificar una visita
+      description: Modificar la información de una visita determinada por su ID.
+      operationId: modifyVisit
+      parameters:
+        - name: visitId
+          in: path
+          description: Id de la visita
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevos datos de la visita
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/VisitIn'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    patch:
+      tags:
+        - visits
+      summary: Cambiar el comentario de una visita
+      description: Cambiar el comentario de una visita determinada por su ID.
+      operationId: patchVisit
+      parameters:
+        - name: visitId
+          in: path
+          description: Id de la visita
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevo comentario
+        required: true
+        content:
+         application/json:
+          schema:
+            type: string
+            example: "Nuevo comentario"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la visita
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /places:
+    get:
+      tags:
+        - places
+      summary: Lista de lugares
+      description: Mostrar la lista de todos los lugares.
+      operationId: getPlaces
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Place'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:      
+      tags:
+        - places
+      summary: Insertar un lugar
+      description: Añadir un nuevo lugar a la lista.
+      operationId: postPlaces
+      requestBody:
+        description: Crea un nuevo lugar
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/PlaceIn'
+      responses:
+        '201':
+          description: Se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /place/{placeId}:
+    get:
+      tags:
+        - places
+      summary: Mostrar un lugar
+      description: Mostrar la información de un lugar determinado por su ID.
+      operationId: getPlace
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - places
+      summary: Eliminar un lugar
+      description: Eliminar la información de un lugar determinado por su ID.
+      operationId: deletePlace
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - places
+      summary: Modificar un lugar
+      description: Modificar la información de un lugar determinado por su ID.
+      operationId: modifyPlace
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevos datos del lugar
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/PlaceIn'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    patch:
+      tags:
+        - places
+      summary: Cambiar la descripción de un lugar
+      description: Cambiar la descripción de un lugar determinado por su ID.
+      operationId: patchPlace
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nueva descripción
+        required: true
+        content:
+         application/json:
+          schema:
+            type: string
+            example: "Nueva descripción del lugar"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /place/{placeId}/rating:
+    get:
+      tags:
+        - places
+      summary: Mostrar la valoración de un lugar
+      description: Mostrar la valoración media de un lugar determinado por su ID.
+      operationId: getPlaceRating
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /place/{placeId}/numVisits:
+    get:
+      tags:
+        - places
+        - visits
+      summary: Mostrar el número de visitas a un lugar
+      description: Mostrar el número de visitas totales a un lugar determinado por su ID.
+      operationId: getPlaceNumVisits
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /place/{placeId}/visits:
+    get:
+      tags:
+        - places
+        - visits
+      summary: Mostrar las visitas de un lugar
+      description: Mostrar la información de las visitas realizadas a un lugar determinado por su ID.
+      operationId: getPlaceVisits
+      parameters:
+        - name: placeId
+          in: path
+          description: Id del lugar
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Visit'
+        '404':
+          description: No se ha encontrado el lugar
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /provinces:
+    get:
+      tags:
+        - provinces
+      summary: Lista de provincias
+      description: Mostrar todas las provincias.
+      operationId: getProvinces
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Province'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:      
+      tags:
+        - provinces
+      summary: Insertar una provincia
+      description: Añadir una nueva provincia a la lista.
+      operationId: postProvinces
+      requestBody:
+        description: Crea una nueva provincia
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/ProvinceIn'
+      responses:
+        '201':
+          description: Se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Province'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /province/{provinceId}:
+    get:
+      tags:
+        - provinces
+      summary: Mostrar una provincia
+      description: Mostrar la información de una provincia determinada por su ID.
+      operationId: getProvince
+      parameters:
+        - name: provinceId
+          in: path
+          description: Id de la provincia
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Province'
+        '404':
+          description: No se ha encontrado la provincia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - provinces
+      summary: Eliminar una provincia
+      description: Eliminar la información de una provincia determinada por su ID.
+      operationId: deleteProvince
+      parameters:
+        - name: provinceId
+          in: path
+          description: Id de la provincia
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: No se ha encontrado la provincia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - provinces
+      summary: Modificar una provincia
+      description: Modificar la información de una provincia determinada por su ID.
+      operationId: modifyProvince
+      parameters:
+        - name: provinceId
+          in: path
+          description: Id de la provincia
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevos datos de la provincia
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/ProvinceIn'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Province'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la provincia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /province/{provinceId}/places:
+    get:
+      tags:
+        - provinces
+        - places
+      summary: Mostrar los lugares de una provincia
+      description: Mostrar la información de los lugares de una provincia determinada por su ID.
+      operationId: getProvincePlaces
+      parameters:
+        - name: provinceId
+          in: path
+          description: Id de la provincia
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Place'
+        '404':
+          description: No se ha encontrado la provincia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /countries:
+    get:
+      tags:
+        - countries
+      summary: Lista de países
+      description: Mostrar todos los países.
+      operationId: getCountries
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:      
+      tags:
+        - countries
+      summary: Insertar un país
+      description: Añadir un nuevo país a la lista.
+      operationId: postCountries
+      requestBody:
+        description: Crea un nuevo país
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/CountryIn'
+      responses:
+        '201':
+          description: Se ha registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /country/{countryId}:
+    get:
+      tags:
+        - countries
+      summary: Mostrar un país
+      description: Mostrar la información de un país determinado por su ID.
+      operationId: getCountry
+      parameters:
+        - name: countryId
+          in: path
+          description: Id del país
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+        '404':
+          description: No se ha encontrado el país
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    delete:
+      tags:
+        - countries
+      summary: Eliminar un país
+      description: Eliminar la información de un país determinado por su ID.
+      operationId: deleteCountry
+      parameters:
+        - name: countryId
+          in: path
+          description: Id del país
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: No se ha encontrado el país
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    put:
+      tags:
+        - countries
+      summary: Modificar un país
+      description: Modificar la información de un país determinado por su ID.
+      operationId: modifyCountry
+      parameters:
+        - name: countryId
+          in: path
+          description: Id del país
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      requestBody:
+        description: Nuevos datos del país
+        required: true
+        content:
+         application/json:
+          schema:
+            $ref: '#/components/schemas/CountryIn'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el país
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /country/{countryId}/provinces:
+    get:
+      tags:
+        - countries
+        - provinces
+      summary: Mostrar las provincias de un país
+      description: Mostrar la información de las provincias de un país determinado por su ID.
+      operationId: getCountryProvinces
+      parameters:
+        - name: countryId
+          in: path
+          description: Id del país
+          required: true
+          schema:
+            type: number
+            format: int64
+            example: 1
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Province'
+        '404':
+          description: No se ha encontrado el país
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+    schemas:
+      UserIn:
+        required:
+          - name
+          - surname
+        properties:
+          name:
+            type: string
+            example: "Nombre"
+          surname:
+            type: string
+            example: "Apellido"
+          email:
+            type: string
+            example: "Email"
+          phone:
+            type: string
+            example: "111111111"
+          sendData:
+            type: boolean
+            example: true
+        type: object
+      User:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+          - $ref: '#/components/schemas/UserIn'
+      VisitIn:
+        required:
+          - date
+          - user
+          - place
+        properties:
+          date:
+            type: string
+            format: date
+            example: "2022-03-25"
+          rating:
+            type: number
+            format: float
+            example: 0
+          commentary:
+            type: string
+            example: "Comentario de prueba"
+          user:
+            type: number
+            format: int64
+            example: 1
+          place:
+            type: number
+            format: int64
+            example: 1
+        type: object
+      Visit:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+          - $ref: '#/components/schemas/VisitIn'
+      PlaceIn:
+        required:
+          - name
+          - description
+          - latitude
+          - longitude
+          - province
+        properties:
+          name:
+            type: string
+            example: "Nombre del lugar"
+          description:
+            type: string
+            example: "Descripción del lugar"
+          latitude:
+            type: number
+            format: float
+            example: 15.2
+          longitude:
+            type: number
+            format: float
+            example: 23.8
+          province:
+            type: number
+            format: int64
+            example: 1
+        type: object
+      Place:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+          - $ref: '#/components/schemas/PlaceIn'
+      ProvinceIn:
+        required:
+          - name
+          - country
+        properties:
+          name:
+            type: string
+            example: "Nombre de la provincia"
+          country:
+            type: number
+            format: int64
+            example: 1
+        type: object
+      Province:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+          - $ref: '#/components/schemas/ProvinceIn'
+      CountryIn:
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            example: "Nombre del país"
+        type: object
+      Country:
+        allOf:
+          - type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+          - $ref: '#/components/schemas/CountryIn'
+      ErrorResponse:
+        properties:
+          internalError:
+            type: number
+            format: int32
+          message:
+            type: string
+        type: object
+      BadRequest:
+        allOf:
+          - type: object
+          - $ref: '#/components/schemas/ErrorResponse'
+        example:
+          internalError: 400
+          message: "La consulta no es válida"
+      ResourceNotFound:
+        allOf:
+          - type: object
+          - $ref: '#/components/schemas/ErrorResponse'
+        example:
+          internalError: 404
+          message: "Recurso no encontrado"
+      InternalServerError:
+        allOf:
+          - type: object
+          - $ref: '#/components/schemas/ErrorResponse'
+        example:
+          internalError: 500
+          message: Error interno del servidor
