@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
@@ -21,15 +24,19 @@ public class User {
     private long id;
 
     @Column
+    @NotNull
     private String name;
 
     @Column
+    @NotNull
     private String surname;
 
     @Column
+    @Email
     private String email;
 
     @Column
+    @Pattern(regexp = "[0-9]{9}")
     private String phone;
 
     @Column(name = "send_data")

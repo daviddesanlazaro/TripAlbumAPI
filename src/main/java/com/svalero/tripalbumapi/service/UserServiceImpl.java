@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers(boolean sendData, String name, String surname) {
-        return userRepository.findBySendDataOrNameOrSurname(sendData, name, surname);
+    public List<User> findAllUsers(String name, String surname) {
+        return userRepository.findByNameOrSurname(name, surname);
     }
 
     @Override
@@ -42,11 +42,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteUser(long id) throws UserNotFoundException {
+    public void deleteUser(long id) throws UserNotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
-        return user;
     }
 
     @Override

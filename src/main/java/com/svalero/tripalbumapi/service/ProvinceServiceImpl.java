@@ -49,11 +49,10 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public Province deleteProvince(long id) throws ProvinceNotFoundException {
+    public void deleteProvince(long id) throws ProvinceNotFoundException {
         Province province = provinceRepository.findById(id)
                 .orElseThrow(ProvinceNotFoundException::new);
         provinceRepository.delete(province);
-        return province;
     }
 
     @Override
@@ -71,11 +70,11 @@ public class ProvinceServiceImpl implements ProvinceService {
         return provinceRepository.save(province);
     }
 
-    @Override
-    public Province patchProvince(long id, String name) throws ProvinceNotFoundException {
-        Province province = provinceRepository.findById(id)
-                .orElseThrow(ProvinceNotFoundException::new);
-        province.setName(name);
-        return provinceRepository.save(province);
-    }
+//    @Override
+//    public Province patchProvince(long id, String name) throws ProvinceNotFoundException {
+//        Province province = provinceRepository.findById(id)
+//                .orElseThrow(ProvinceNotFoundException::new);
+//        province.setName(name);
+//        return provinceRepository.save(province);
+//    }
 }

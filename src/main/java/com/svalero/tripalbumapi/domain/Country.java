@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -21,6 +22,7 @@ public class Country {
     private long id;
 
     @Column
+    @NotNull
     private String name;
 
     @OneToMany(mappedBy = "country")

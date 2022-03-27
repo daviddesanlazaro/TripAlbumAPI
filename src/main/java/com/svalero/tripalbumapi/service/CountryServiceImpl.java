@@ -31,11 +31,10 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
-    public Country deleteCountry(long id) throws CountryNotFoundException {
+    public void deleteCountry(long id) throws CountryNotFoundException {
         Country country = countryRepository.findById(id)
                 .orElseThrow(CountryNotFoundException::new);
         countryRepository.delete(country);
-        return country;
     }
 
     @Override
@@ -47,11 +46,11 @@ public class CountryServiceImpl implements CountryService {
         return countryRepository.save(country);
     }
 
-    @Override
-    public Country patchCountry(long id, String name) throws CountryNotFoundException {
-        Country country = countryRepository.findById(id)
-                .orElseThrow(CountryNotFoundException::new);
-        country.setName(name);
-        return countryRepository.save(country);
-    }
+//    @Override
+//    public Country patchCountry(long id, String name) throws CountryNotFoundException {
+//        Country country = countryRepository.findById(id)
+//                .orElseThrow(CountryNotFoundException::new);
+//        country.setName(name);
+//        return countryRepository.save(country);
+//    }
 }
