@@ -62,17 +62,6 @@ public class ProvinceController {
     @PostMapping("/provinces")
     public ResponseEntity<?> addProvince(@Valid @RequestBody ProvinceDTO provinceDto) throws CountryNotFoundException {
         logger.info("Start AddProvince");
-
-//        if ((provinceDto.getName() == null) || (provinceDto.getCountry() == 0)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (provinceDto.getCountry() == 0)
-//                error = error + " País";
-//            if (provinceDto.getName() == null)
-//                error = error + " Nombre";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Province province = provinceService.addProvince(provinceDto);
         logger.info("End AddProvince");
         return ResponseEntity.ok(province);
@@ -82,17 +71,6 @@ public class ProvinceController {
     @PutMapping("/province/{id}")
     public ResponseEntity<?> modifyProvince(@Valid @RequestBody ProvinceDTO provinceDto, @PathVariable long id) throws ProvinceNotFoundException, CountryNotFoundException {
         logger.info("Start ModifyProvince " + id);
-
-//        if ((provinceDto.getName() == null) || (provinceDto.getCountry() == 0)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (provinceDto.getCountry() == 0)
-//                error = error + " País";
-//            if (provinceDto.getName() == null)
-//                error = error + " Nombre";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Province newProvince = provinceService.modifyProvince(id, provinceDto);
         logger.info("End ModifyProvince " + id);
         return ResponseEntity.ok(newProvince);
@@ -100,34 +78,24 @@ public class ProvinceController {
 
     // Mostrar todos los lugares de una provincia
     @GetMapping("/province/{provinceId}/places")
-    public ResponseEntity<?> getPlaces(@PathVariable long provinceId) throws ProvinceNotFoundException {
+    public ResponseEntity<?> getPlaces(@PathVariable long provinceId,
+               @RequestParam (name = "name", required = false, defaultValue = "") String name) throws ProvinceNotFoundException {
         logger.info("Start getPlacesByProvince");
         List<Place> places = null;
         logger.info("Search for province " + provinceId);
         Province province = provinceService.findProvince(provinceId);
         logger.info("Province found. Search for places");
-        places = placeService.findPlaces(province);
+        if (name.equals("")) {
+            logger.info("Show all places");
+            places = placeService.findPlaces(province);
+        } else {
+            logger.info("Show places with search");
+            places = placeService.findBySearch(province, name);
+        }
+
         logger.info("End getPlacesByProvince");
         return ResponseEntity.ok(places);
     }
-
-//    // Cambiar el nombre de una provincia
-//    @PatchMapping("/province/{id}")
-//    public Province patchProvince(@PathVariable long id, @RequestBody String name) throws ProvinceNotFoundException {
-//        logger.info("Start PatchProvince " + id);
-//        Province province = provinceService.patchProvince(id, name);
-//        logger.info("End patchProvince " + id);
-//        return province;
-//    }
-
-//    // Mostrar lugares de una provincia con mayor latitud que la determinada. JPQL
-//    @GetMapping("/province/places/latitude")
-//    public List<Place> findByProvinceLatitude(@RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
-//        logger.info("Start findByProvinceLatitude");
-//        List<Place> places = placeService.findByProvinceLatitude(placeDto);
-//        logger.info("End findByProvinceLatitude");
-//        return places;
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

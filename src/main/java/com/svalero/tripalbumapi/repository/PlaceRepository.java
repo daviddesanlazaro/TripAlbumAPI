@@ -22,11 +22,6 @@ public interface PlaceRepository extends CrudRepository<Place, Long> {
     @Query(value = "SELECT COUNT(*) FROM \"visits\" WHERE \"place_id\" = ?1", nativeQuery = true)
     int numVisits(long placeId);
 
-//    // Contar los usuarios únicos que han visitado un lugar
-//    @Query(value = "SELECT COUNT(DISTINCT \"user_id\") FROM \"visits\" WHERE \"place_id\" = ?1", nativeQuery = true)
-//    int numUsers(long placeId);
-
-//    // Mostrar lugares de una provincia con mayor latitud que la determinada
-//    @Query("SELECT p FROM Place p WHERE province = :province AND latitude >= :latitude")
-//    List<Place> findByProvinceLatitude(@Param("province") Province province, @Param("latitude") float latitude);
+    // Búsqueda por nombre y provincia
+    List<Place> findByProvinceAndNameContains(Province province, String name);
 }

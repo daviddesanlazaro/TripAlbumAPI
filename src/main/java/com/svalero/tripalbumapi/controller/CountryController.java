@@ -63,11 +63,6 @@ public class CountryController {
     @PostMapping("/countries")
     public ResponseEntity<?> addCountry(@Valid @RequestBody Country country) {
         logger.info("Start AddCountry");
-
-//        if (country.getName() == null)
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("El nombre no es correcto"));
-//        logger.info("Request accepted");
-
         Country newCountry = countryService.addCountry(country);
         logger.info("End AddCountry");
         return ResponseEntity.ok(newCountry);
@@ -77,11 +72,6 @@ public class CountryController {
     @PutMapping("/country/{id}")
     public ResponseEntity<?> modifyCountry(@Valid @RequestBody Country country, @PathVariable long id) throws CountryNotFoundException {
         logger.info("Start ModifyCountry " + id);
-
-//        if (country.getName() == null)
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("El nombre no es correcto"));
-//        logger.info("Request accepted");
-
         Country newCountry = countryService.modifyCountry(id, country);
         logger.info("End ModifyCountry " + id);
         return ResponseEntity.ok(newCountry);
@@ -99,15 +89,6 @@ public class CountryController {
         logger.info("End getProvincesByCountry");
         return ResponseEntity.ok(provinces);
     }
-
-//    // Cambiar el nombre de un país
-//    @PatchMapping("/country/{id}")
-//    public Country patchCountry(@PathVariable long id, @RequestBody String name) throws CountryNotFoundException {
-//        logger.info("Start PatchCountry " + id);
-//        Country country = countryService.patchCountry(id, name);
-//        logger.info("End patchCountry " + id);
-//        return country;
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

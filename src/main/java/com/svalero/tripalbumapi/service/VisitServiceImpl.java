@@ -47,15 +47,13 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public Visit addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
-        User user = userRepository.findById(visitDto.getUser())
+        User user = userRepository.findById(visitDto.getUserId())
                 .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(visitDto.getPlace())
+        Place place = placeRepository.findById(visitDto.getPlaceId())
                 .orElseThrow(PlaceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
-        Visit visit = mapper.map(visitDto, Visit.class);
-        visit.setUser(user);
-        visit.setPlace(place);
+        Visit visit = new Visit (0, user, place, visitDto.getDate(), visitDto.getRating(), visitDto.getCommentary(), visitDto.getImage());
         return visitRepository.save(visit);
     }
 
@@ -70,9 +68,9 @@ public class VisitServiceImpl implements VisitService {
     public Visit modifyVisit(long id, VisitDTO newVisitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
         Visit visit = visitRepository.findById(id)
                 .orElseThrow(VisitNotFoundException::new);
-        User user = userRepository.findById(newVisitDto.getUser())
+        User user = userRepository.findById(newVisitDto.getUserId())
                 .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(newVisitDto.getPlace())
+        Place place = placeRepository.findById(newVisitDto.getPlaceId())
                 .orElseThrow(PlaceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
@@ -91,18 +89,6 @@ public class VisitServiceImpl implements VisitService {
         return visitRepository.save(visit);
     }
 
-//    @Override
-//    public List<Visit> findRecentVisits(LocalDate localDate) {
-//        return visitRepository.findRecentVisits(localDate);
-//    }
-
-//    @Override
-//    public String findCommentary(long id) throws VisitNotFoundException {
-//        Visit visit = visitRepository.findById(id)
-//                .orElseThrow(VisitNotFoundException::new);
-//        return visitRepository.findCommentary(id);
-//    }
-
     @Override
     public List<Visit> findByUserAndPlace(long userId, long placeId) throws UserNotFoundException, PlaceNotFoundException {
         User user = userRepository.findById(userId)
@@ -111,18 +97,4 @@ public class VisitServiceImpl implements VisitService {
                 .orElseThrow(PlaceNotFoundException::new);
         return visitRepository.findByUserAndPlace(user, place);
     }
-
-//    @Override
-//    public List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException {
-//        Place place = placeRepository.findById(visitDto.getPlace())
-//                .orElseThrow(PlaceNotFoundException::new);
-//        return visitRepository.findByPlaceRating(place, visitDto.getRating());
-//    }
-
-//    @Override
-//    public void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException {
-//        User user = userRepository.findById(visitDto.getUser())
-//                .orElseThrow(UserNotFoundException::new);
-//        visitRepository.deleteByUserRating(user, visitDto.getRating());
-//    }
 }

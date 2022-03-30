@@ -16,5 +16,4 @@ public interface ProvinceService {
     Province addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException;
     void deleteProvince(long id) throws ProvinceNotFoundException;
     Province modifyProvince(long id, ProvinceDTO provinceDto) throws ProvinceNotFoundException, CountryNotFoundException;
-//    Province patchProvince(long id, String name) throws ProvinceNotFoundException;
 }

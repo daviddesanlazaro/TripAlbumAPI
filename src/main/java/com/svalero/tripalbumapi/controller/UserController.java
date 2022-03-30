@@ -70,17 +70,6 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         logger.info("Start AddUser");
-
-//        if ((user.getName() == null) || (user.getSurname() == null)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (user.getName() == null)
-//                error = error + " Nombre";
-//            if (user.getSurname() == null)
-//                error = error + " Apellido";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         User newUser = userService.addUser(user);
         logger.info("End AddUser");
         return ResponseEntity.ok(newUser);
@@ -90,17 +79,6 @@ public class UserController {
     @PutMapping("/user/{id}")
     public ResponseEntity<?> modifyUser(@Valid @RequestBody User user, @PathVariable long id) throws UserNotFoundException {
         logger.info("Start ModifyUser " + id);
-
-//        if ((user.getName() == null) || (user.getSurname() == null)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (user.getName() == null)
-//                error = error + " Nombre";
-//            if (user.getSurname() == null)
-//                error = error + " Apellido";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         User newUser = userService.modifyUser(id, user);
         logger.info("End ModifyUser " + id);
         return ResponseEntity.ok(newUser);
@@ -123,11 +101,6 @@ public class UserController {
     @PatchMapping("/user/{id}")
     public ResponseEntity<?> patchUser(@PathVariable long id, @Valid @RequestBody String email) throws UserNotFoundException {
         logger.info("Start PatchUser " + id);
-
-//        if (email == null)
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("El email no es correcto"));
-//        logger.info("Request accepted");
-
         User user = userService.patchUser(id, email);
         logger.info("End patchUser " + id);
         return ResponseEntity.ok(user);
@@ -153,14 +126,6 @@ public class UserController {
         logger.info("End findByUserAndPlace");
         return ResponseEntity.ok(visits);
     }
-
-//    // Eliminar todas las visitas de un usuario con menor valoración que la determinada. JPQL
-//    @DeleteMapping("user/visits")
-//    public void deleteByUserDate(@RequestBody VisitDTO visitDto) throws UserNotFoundException {
-//        logger.info("Start deleteByUserRating");
-//        visitService.deleteByUserRating(visitDto);
-//        logger.info("End deleteByUserRating");
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
