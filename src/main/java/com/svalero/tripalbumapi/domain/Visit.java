@@ -1,6 +1,5 @@
 package com.svalero.tripalbumapi.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +33,6 @@ public class Visit {
     private Place place;
 
     @Column
-    @JsonFormat(pattern = "dd-MM-yyyy")
     @NotNull
     private LocalDate date;
 
@@ -45,4 +43,8 @@ public class Visit {
 
     @Column
     private String commentary;
+
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
 }

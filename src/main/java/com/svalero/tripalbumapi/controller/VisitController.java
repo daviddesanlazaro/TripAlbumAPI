@@ -4,7 +4,6 @@ import com.svalero.tripalbumapi.domain.Visit;
 import com.svalero.tripalbumapi.domain.dto.VisitDTO;
 import com.svalero.tripalbumapi.exception.*;
 import com.svalero.tripalbumapi.service.VisitService;
-import lombok.Builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,19 +58,6 @@ public class VisitController {
     @PostMapping("/visits")
     public ResponseEntity<?> addVisit(@Valid @RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
         logger.info("Start AddVisit");
-
-//        if (((visitDto.getDate() == null) || (visitDto.getUser() == 0)) || (visitDto.getPlace() == 0)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (visitDto.getDate() == null)
-//                error = error + " Fecha";
-//            if (visitDto.getUser() == 0)
-//                error = error + " Usuario";
-//            if (visitDto.getPlace() == 0)
-//                error = error + " Lugar";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Visit visit = visitService.addVisit(visitDto);
         logger.info("End AddVisit");
         return ResponseEntity.ok(visit);
@@ -84,18 +70,6 @@ public class VisitController {
         if (visitDto.getCommentary() == null)
             visitDto.setCommentary("");
 
-//        if (((visitDto.getDate() == null) || (visitDto.getUser() == 0)) || (visitDto.getPlace() == 0)) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (visitDto.getDate() == null)
-//                error = error + " Fecha";
-//            if (visitDto.getUser() == 0)
-//                error = error + " Usuario";
-//            if (visitDto.getPlace() == 0)
-//                error = error + " Lugar";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Visit newVisit = visitService.modifyVisit(id, visitDto);
         logger.info("End ModifyVisit " + id);
         return ResponseEntity.ok(newVisit);
@@ -106,35 +80,10 @@ public class VisitController {
     public ResponseEntity<?> patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
         logger.info("Start PatchVisit " + id);
 
-//        if (commentary == null)
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("El comentario no es correcto"));
-//        logger.info("Request accepted");
-
         Visit visit = visitService.patchVisit(id, commentary);
         logger.info("End patchVisit " + id);
         return ResponseEntity.ok(visit);
     }
-
-//    // Mostrar las visitas realizadas después de una fecha determinada. JPQL
-//    @GetMapping("/visits/date")
-//    public List<Visit> findRecentVisits(@RequestBody String date) {
-//        logger.info("Start findRecentVisits. Convert date");
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        LocalDate localDate = LocalDate.parse(date, dtf);
-//        logger.info("Date converted");
-//        List<Visit> visits = visitService.findRecentVisits(localDate);
-//        logger.info("End findRecentVisits");
-//        return visits;
-//    }
-
-//    // Mostrar el comentario realizado sobre una visita. JPQL
-//    @GetMapping("/visit/{id}/commentary")
-//    public ResponseEntity<?> findCommentary(@PathVariable long id) throws VisitNotFoundException {
-//        logger.info("Start findCommentary");
-//        String commentary = visitService.findCommentary(id);
-//        logger.info("End findCommentary");
-//        return ResponseEntity.ok(commentary);
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

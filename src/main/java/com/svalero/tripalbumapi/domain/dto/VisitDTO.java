@@ -1,6 +1,5 @@
 package com.svalero.tripalbumapi.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,14 +13,14 @@ import java.time.LocalDate;
 
 public class VisitDTO {
     @NotNull
-    private long user;
+    private long userId;
     @NotNull
-    private long place;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    private long placeId;
     @NotNull
     private LocalDate date;
     @Min(value = 0)
     @Max(value = 10)
     private float rating;
     private String commentary;
+    private byte[] image;
 }

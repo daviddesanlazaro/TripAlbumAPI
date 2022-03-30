@@ -61,23 +61,6 @@ public class PlaceController {
     @PostMapping("/places")
     public ResponseEntity<?> addPlace(@Valid @RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
         logger.info("Start AddPlace");
-
-//        if ((((placeDto.getName() == null) || (placeDto.getDescription() == null) || (placeDto.getLatitude() == 0) || (placeDto.getLongitude() == 0)))) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (placeDto.getProvince() == 0)
-//                error = error + "Provincia";
-//            if (placeDto.getName() == null)
-//                error = error + " Nombre";
-//            if (placeDto.getDescription() == null)
-//                error = error + " Descripción";
-//            if (placeDto.getLatitude() == 0)
-//                error = error + " Latitud";
-//            if (placeDto.getLongitude() == 0)
-//                error = error + " Longitud";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Place place = placeService.addPlace(placeDto);
         logger.info("End AddPlace");
         return ResponseEntity.ok(place);
@@ -87,23 +70,6 @@ public class PlaceController {
     @PutMapping("/place/{id}")
     public ResponseEntity<?> modifyPlace(@Valid @RequestBody PlaceDTO placeDto, @PathVariable long id) throws PlaceNotFoundException, ProvinceNotFoundException {
         logger.info("Start ModifyPlace " + id);
-
-//        if ((((placeDto.getName() == null) || (placeDto.getDescription() == null) || (placeDto.getLatitude() == 0) || (placeDto.getLongitude() == 0)))) {
-//            String error = "Los siguientes campos son incorrectos:";
-//            if (placeDto.getProvince() == 0)
-//                error = error + "Provincia";
-//            if (placeDto.getName() == null)
-//                error = error + " Nombre";
-//            if (placeDto.getDescription() == null)
-//                error = error + " Descripción";
-//            if (placeDto.getLatitude() == 0)
-//                error = error + " Latitud";
-//            if (placeDto.getLongitude() == 0)
-//                error = error + " Longitud";
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest(error));
-//        }
-//        logger.info("Request accepted");
-
         Place newPlace = placeService.modifyPlace(id, placeDto);
         logger.info("End ModifyPlace " + id);
         return ResponseEntity.ok(newPlace);
@@ -126,11 +92,6 @@ public class PlaceController {
     @PatchMapping("/place/{id}")
     public ResponseEntity<?> patchPlace(@PathVariable long id, @Valid @RequestBody String description) throws PlaceNotFoundException {
         logger.info("Start PatchPlace " + id);
-
-//        if (description == null)
-//            return ResponseEntity.badRequest().body(ErrorResponse.badRequest("La descripción no es correcta"));
-//        logger.info("Request accepted");
-
         Place place = placeService.patchPlace(id, description);
         logger.info("End patchPlace " + id);
         return ResponseEntity.ok(place);
@@ -153,24 +114,6 @@ public class PlaceController {
         logger.info("End numVisits " + id);
         return ResponseEntity.ok(visits);
     }
-
-//    // Contar los usuarios únicos que han visitado un lugar. SQL
-//    @GetMapping("/place/{id}/numUsers")
-//    public int numUsers(@PathVariable long id) throws PlaceNotFoundException {
-//        logger.info("Start numUsers " + id);
-//        int users = placeService.numUsers(id);
-//        logger.info("End numUsers " + id);
-//        return users;
-//    }
-
-//    // Mostrar visitas a un lugar con mejor valoración que la determinada. JPQL
-//    @GetMapping("/place/visits/rating")
-//    public List<Visit> findByPlaceRating(@RequestBody VisitDTO visitDto) throws PlaceNotFoundException {
-//        logger.info("Start findByPlaceRating");
-//        List<Visit> visits = visitService.findByPlaceRating(visitDto);
-//        logger.info("End findByPlaceRating");
-//        return visits;
-//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)

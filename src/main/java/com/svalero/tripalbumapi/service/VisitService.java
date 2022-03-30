@@ -19,10 +19,5 @@ public interface VisitService {
     Visit modifyVisit(long id, VisitDTO visitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException;
     Visit patchVisit(long id, String commentary) throws VisitNotFoundException;
 
-//    List<Visit> findRecentVisits(LocalDate localDate);
-//    String findCommentary(long id) throws VisitNotFoundException;
-
     List<Visit> findByUserAndPlace(long userId, long placeId) throws UserNotFoundException, PlaceNotFoundException;
-//    List<Visit> findByPlaceRating(VisitDTO visitDto) throws PlaceNotFoundException;
-//    void deleteByUserRating(VisitDTO visitDto) throws UserNotFoundException;
 }

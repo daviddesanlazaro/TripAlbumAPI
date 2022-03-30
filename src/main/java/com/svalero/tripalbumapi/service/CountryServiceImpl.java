@@ -45,12 +45,4 @@ public class CountryServiceImpl implements CountryService {
 
         return countryRepository.save(country);
     }
-
-//    @Override
-//    public Country patchCountry(long id, String name) throws CountryNotFoundException {
-//        Country country = countryRepository.findById(id)
-//                .orElseThrow(CountryNotFoundException::new);
-//        country.setName(name);
-//        return countryRepository.save(country);
-//    }
 }
