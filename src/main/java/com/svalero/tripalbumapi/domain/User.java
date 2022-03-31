@@ -45,4 +45,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonBackReference(value = "user-visit")
     private List<Visit> visits;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference(value = "user-favorite")
+    private List<Favorite> favorites;
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference(value = "user-friend")
+    private List<Friendship> friends;
 }

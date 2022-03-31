@@ -1,9 +1,9 @@
 package com.svalero.tripalbumapi.controller;
 
-import com.svalero.tripalbumapi.domain.Place;
-import com.svalero.tripalbumapi.domain.User;
-import com.svalero.tripalbumapi.domain.Visit;
+import com.svalero.tripalbumapi.domain.*;
 import com.svalero.tripalbumapi.exception.*;
+import com.svalero.tripalbumapi.service.FavoriteService;
+import com.svalero.tripalbumapi.service.FriendshipService;
 import com.svalero.tripalbumapi.service.UserService;
 import com.svalero.tripalbumapi.service.VisitService;
 import org.slf4j.Logger;
@@ -29,6 +29,10 @@ public class UserController {
     private UserService userService;
     @Autowired
     private VisitService visitService;
+    @Autowired
+    private FavoriteService favoriteService;
+    @Autowired
+    private FriendshipService friendshipService;
 
     // Mostrar usuarios. Los parámetros permiten filtar por nombre o apellido
     @GetMapping("/users")
@@ -118,6 +122,30 @@ public class UserController {
         return ResponseEntity.ok(places);
     }
 
+    // Mostrar los lugares favoritos de un usuario. JPQL
+    @GetMapping("/user/{userId}/favoritePlaces")
+    public ResponseEntity<?> findFavoritePlacesUser(@PathVariable long userId) throws UserNotFoundException {
+        logger.info("Start findFavoritePlacesUser " + userId);
+        User user = new User();
+        user.setId(userId);
+        logger.info("User created");
+        List<Place> places = userService.findFavoritePlacesUser(user);
+        logger.info("End findFavoritePlacesUser " + userId);
+        return ResponseEntity.ok(places);
+    }
+
+    // Mostrar los lugares favoritos de un usuario. JPQL
+    @GetMapping("/user/{userId}/friends")
+    public ResponseEntity<?> findFriendsUser(@PathVariable long userId) throws UserNotFoundException {
+        logger.info("Start findFriendsUser " + userId);
+        User user = new User();
+        user.setId(userId);
+        logger.info("User created");
+        List<User> users = userService.findFriendsUser(user);
+        logger.info("End findFriendsUser " + userId);
+        return ResponseEntity.ok(users);
+    }
+
     // Mostrar las visitas realizadas por un usuario determinado a un lugar determinado
     @GetMapping("/user/{userId}/place/{placeId}/visits")
     public ResponseEntity<?> findByUserAndPlace(@PathVariable long userId, @PathVariable long placeId) throws UserNotFoundException, PlaceNotFoundException {
@@ -125,6 +153,32 @@ public class UserController {
         List<Visit> visits = visitService.findByUserAndPlace(userId, placeId);
         logger.info("End findByUserAndPlace");
         return ResponseEntity.ok(visits);
+    }
+
+    // Mostrar todos los favoritos por usuario
+    @GetMapping("/user/{userId}/favorites")
+    public ResponseEntity<?> getFavoritesByUser(@PathVariable long userId) throws UserNotFoundException {
+        logger.info("Start getFavoritesByUser");
+        List<Favorite> favorites = null;
+        logger.info("Search for user " + userId);
+        User user = userService.findUser(userId);
+        logger.info("User found. Search for favorites");
+        favorites = favoriteService.findFavorites(user);
+        logger.info("End getFavoritesByUser");
+        return ResponseEntity.ok(favorites);
+    }
+
+    // Mostrar todas las amistades por usuario
+    @GetMapping("/user/{userId}/friendships")
+    public ResponseEntity<?> getFrienshipsByUser(@PathVariable long userId) throws UserNotFoundException {
+        logger.info("Start getFrienshipsByUser");
+        List<Friendship> friendships = null;
+        logger.info("Search for user " + userId);
+        User user = userService.findUser(userId);
+        logger.info("User found. Search for favorites");
+        friendships = friendshipService.findFriendships(user);
+        logger.info("End getFrienshipsByUser");
+        return ResponseEntity.ok(friendships);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

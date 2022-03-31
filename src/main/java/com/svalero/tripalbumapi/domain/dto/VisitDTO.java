@@ -13,9 +13,9 @@ import java.time.LocalDate;
 
 public class VisitDTO {
     @NotNull
-    private long userId;
+    private long user;
     @NotNull
-    private long placeId;
+    private long place;
     @NotNull
     private LocalDate date;
     @Min(value = 0)
