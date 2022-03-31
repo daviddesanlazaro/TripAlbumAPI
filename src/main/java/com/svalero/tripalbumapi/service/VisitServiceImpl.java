@@ -47,9 +47,9 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public Visit addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
-        User user = userRepository.findById(visitDto.getUserId())
+        User user = userRepository.findById(visitDto.getUser())
                 .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(visitDto.getPlaceId())
+        Place place = placeRepository.findById(visitDto.getPlace())
                 .orElseThrow(PlaceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();
@@ -68,9 +68,9 @@ public class VisitServiceImpl implements VisitService {
     public Visit modifyVisit(long id, VisitDTO newVisitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
         Visit visit = visitRepository.findById(id)
                 .orElseThrow(VisitNotFoundException::new);
-        User user = userRepository.findById(newVisitDto.getUserId())
+        User user = userRepository.findById(newVisitDto.getUser())
                 .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(newVisitDto.getPlaceId())
+        Place place = placeRepository.findById(newVisitDto.getPlace())
                 .orElseThrow(PlaceNotFoundException::new);
 
         ModelMapper mapper = new ModelMapper();

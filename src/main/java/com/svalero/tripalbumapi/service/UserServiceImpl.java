@@ -75,4 +75,18 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
         return userRepository.findPlacesUser(user);
     }
+
+    @Override
+    public List<Place> findFavoritePlacesUser(User user) throws UserNotFoundException {
+        user = userRepository.findById(user.getId())
+                .orElseThrow(UserNotFoundException::new);
+        return userRepository.findFavoritePlacesUser(user);
+    }
+
+    @Override
+    public List<User> findFriendsUser(User user) throws UserNotFoundException {
+        user = userRepository.findById(user.getId())
+                .orElseThrow(UserNotFoundException::new);
+        return userRepository.findFriendsUser(user);
+    }
 }

@@ -45,4 +45,8 @@ public class Place {
     @OneToMany(mappedBy = "place")
     @JsonBackReference(value = "place-visit")
     private List<Visit> visits;
+
+    @OneToMany(mappedBy = "place")
+    @JsonBackReference(value = "place-favorite")
+    private List<Favorite> favorites;
 }
