@@ -22,6 +22,9 @@ public interface PlaceRepository extends CrudRepository<Place, Long> {
     @Query(value = "SELECT COUNT(*) FROM \"visits\" WHERE \"place_id\" = ?1", nativeQuery = true)
     int numVisits(long placeId);
 
+    // Búsqueda por nombre
+    List<Place> findByNameContains(String name);
+
     // Búsqueda por nombre y provincia
     List<Place> findByProvinceAndNameContains(Province province, String name);
 }

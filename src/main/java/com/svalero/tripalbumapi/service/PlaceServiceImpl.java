@@ -96,7 +96,12 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Place> findBySearch(Province province, String name) {
+    public List<Place> findBySearch(String name) {
+        return placeRepository.findByNameContains(name);
+    }
+
+    @Override
+    public List<Place> findByProvinceAndSearch(Province province, String name) {
         return placeRepository.findByProvinceAndNameContains(province, name);
     }
 }

@@ -19,7 +19,7 @@ public class FavoriteController {
     private final Logger logger = LoggerFactory.getLogger(ProvinceController.class);
 
     @Autowired
-    FavoriteService favoriteService;
+    private FavoriteService favoriteService;
 
     // Mostrar todos los favoritos
     @GetMapping("/favorites")
@@ -32,7 +32,7 @@ public class FavoriteController {
         return ResponseEntity.ok(favorites);
     }
 
-    // Mostrar una favorito por ID
+    // Mostrar un favorito por ID
     @GetMapping("/favorite/{id}")
     public ResponseEntity<?> getFavorite(@PathVariable long id) throws FavoriteNotFoundException {
         logger.info("Start getFavorite " + id);

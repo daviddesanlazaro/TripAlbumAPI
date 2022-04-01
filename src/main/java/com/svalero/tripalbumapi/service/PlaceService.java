@@ -20,5 +20,7 @@ public interface PlaceService {
 
     float averageRating(long placeId) throws PlaceNotFoundException;
     int numVisits(long placeId) throws PlaceNotFoundException;
-    List<Place> findBySearch(Province province, String name);
+
+    List<Place> findBySearch(String name);
+    List<Place> findByProvinceAndSearch(Province province, String name);
 }
