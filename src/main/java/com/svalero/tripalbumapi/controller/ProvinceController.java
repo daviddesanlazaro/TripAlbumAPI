@@ -90,7 +90,7 @@ public class ProvinceController {
             places = placeService.findPlaces(province);
         } else {
             logger.info("Show places with search");
-            places = placeService.findBySearch(province, name);
+            places = placeService.findByProvinceAndSearch(province, name);
         }
 
         logger.info("End getPlacesByProvince");

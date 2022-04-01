@@ -52,7 +52,6 @@ public class VisitServiceImpl implements VisitService {
         Place place = placeRepository.findById(visitDto.getPlace())
                 .orElseThrow(PlaceNotFoundException::new);
 
-        ModelMapper mapper = new ModelMapper();
         Visit visit = new Visit (0, user, place, visitDto.getDate(), visitDto.getRating(), visitDto.getCommentary(), visitDto.getImage());
         return visitRepository.save(visit);
     }

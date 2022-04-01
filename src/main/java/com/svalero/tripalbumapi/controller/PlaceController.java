@@ -32,10 +32,16 @@ public class PlaceController {
 
     // Mostrar todos los lugares
     @GetMapping("/places")
-    public ResponseEntity<?> getPlaces() {
+    public ResponseEntity<?> getPlaces(@RequestParam (name = "name", required = false, defaultValue = "") String name) {
         logger.info("Start getPlaces");
         List<Place> places;
-        places = placeService.findAllPlaces();
+        if (name.equals("")) {
+            logger.info("Show all places");
+            places = placeService.findAllPlaces();
+        } else {
+            logger.info("Show places with search");
+            places = placeService.findBySearch(name);
+        }
         logger.info("End getPlaces");
         return ResponseEntity.ok(places);
     }
