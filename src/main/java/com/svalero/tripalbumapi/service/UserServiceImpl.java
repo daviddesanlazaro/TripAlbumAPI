@@ -1,12 +1,9 @@
 package com.svalero.tripalbumapi.service;
 
-import com.svalero.tripalbumapi.controller.UserController;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +11,6 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -32,8 +27,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers(String name, String surname) {
-        return userRepository.findByNameOrSurname(name, surname);
+    public List<User> findByName(String name) {
+        return userRepository.findByName(name);
+    }
+
+    @Override
+    public List<User> findNewFriend(long id, String phone) throws UserNotFoundException {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        return userRepository.findNewFriend(user, phone);
     }
 
     @Override

@@ -35,7 +35,6 @@ public class ProvinceController {
     public ResponseEntity<?> getProvinces() {
         logger.info("Start getProvinces");
         List<Province> provinces;
-
         provinces = provinceService.findAllProvinces();
         logger.info("End getProvinces");
         return ResponseEntity.ok(provinces);

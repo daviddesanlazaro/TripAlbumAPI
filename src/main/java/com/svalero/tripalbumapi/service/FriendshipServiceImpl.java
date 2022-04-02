@@ -26,8 +26,13 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public List<Friendship> findFriendships(User user) {
+    public List<Friendship> findByUser(User user) {
         return friendshipRepository.findByUser(user);
+    }
+
+    @Override
+    public Friendship findByUserAndFriend(User user, User friend) {
+        return friendshipRepository.findByUserAndFriend(user, friend);
     }
 
     @Override
@@ -37,10 +42,10 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public Friendship addFriendship(FriendshipDTO friendshipDto) throws UserNotFoundException {
-        User user = userRepository.findById(friendshipDto.getUser())
+    public Friendship addFriendship(FriendshipDTO friendshipDTO) throws UserNotFoundException {
+        User user = userRepository.findById(friendshipDTO.getUser())
                 .orElseThrow(UserNotFoundException::new);
-        User friend = userRepository.findById(friendshipDto.getFriend())
+        User friend = userRepository.findById(friendshipDTO.getFriend())
                 .orElseThrow(UserNotFoundException::new);
 
         Friendship friendship = new Friendship(0, user, friend);

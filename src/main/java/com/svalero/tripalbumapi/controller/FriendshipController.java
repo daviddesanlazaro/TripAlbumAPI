@@ -1,9 +1,11 @@
 package com.svalero.tripalbumapi.controller;
 
 import com.svalero.tripalbumapi.domain.Friendship;
+import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.dto.FriendshipDTO;
 import com.svalero.tripalbumapi.exception.*;
 import com.svalero.tripalbumapi.service.FriendshipService;
+import com.svalero.tripalbumapi.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +27,20 @@ public class FriendshipController {
 
     @Autowired
     FriendshipService friendshipService;
+    @Autowired
+    UserService userService;
 
     // Mostrar todas las amistades
     @GetMapping("/friendships")
-    public ResponseEntity<?> getFriendships() {
+    public ResponseEntity<?> getFriendships() throws UserNotFoundException {
         logger.info("Start getFriendships");
         List<Friendship> friendships;
-
         friendships = friendshipService.findAllFriendships();
         logger.info("End getFriendships");
         return ResponseEntity.ok(friendships);
     }
 
-    // Mostrar una favorito por ID
+    // Mostrar una amistad por ID
     @GetMapping("/friendship/{id}")
     public ResponseEntity<?> getFriendship(@PathVariable long id) throws FriendshipNotFoundException {
         logger.info("Start getFriendship " + id);

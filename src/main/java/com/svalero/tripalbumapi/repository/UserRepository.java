@@ -11,7 +11,12 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findAll();
-    List<User> findByNameOrSurname(String name, String surname);
+    List<User> findByName(String name);
+
+    // Buscar usuario por teléfono para añadir a amigos
+//    @Query("SELECT u FROM User u WHERE NOT id = ?1")
+    @Query("SELECT u FROM User u WHERE NOT id = ALL (SELECT f.friend FROM Friendship f WHERE f.user = ?1) AND NOT id = ?1 AND phone = ?2")
+    List<User> findNewFriend(User user, String phone);
 
     // Mostrar los lugares que ha visitado un usuario
     @Query("SELECT p FROM Place p WHERE id = ANY (SELECT v.place FROM Visit v WHERE v.user = ?1)")

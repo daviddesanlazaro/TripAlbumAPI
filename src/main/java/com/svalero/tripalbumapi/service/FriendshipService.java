@@ -10,7 +10,8 @@ import java.util.List;
 
 public interface FriendshipService {
     List<Friendship> findAllFriendships();
-    List<Friendship> findFriendships(User user);
+    List<Friendship> findByUser(User user);
+    Friendship findByUserAndFriend(User user, User friend) throws UserNotFoundException;
     Friendship findFriendship(long id) throws FriendshipNotFoundException;
     Friendship addFriendship(FriendshipDTO friendDto) throws UserNotFoundException;
     void deleteFriendship(long id) throws FriendshipNotFoundException;
