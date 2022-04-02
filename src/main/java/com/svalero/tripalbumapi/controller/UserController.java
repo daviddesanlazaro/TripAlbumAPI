@@ -36,20 +36,27 @@ public class UserController {
 
     // Mostrar usuarios. Los parámetros permiten filtar por nombre o apellido
     @GetMapping("/users")
-    public ResponseEntity<?> getUsers(
-            @RequestParam(name = "name", required = false, defaultValue = "") String name,
-            @RequestParam(name = "surname", required = false, defaultValue = "") String surname) {
-
+    public ResponseEntity<?> getUsers(@RequestParam(name = "name", required = false, defaultValue = "") String name) {
         logger.info("Start getUsers");
         List<User> users;
-        if ((name.equals("")) && (surname.equals(""))) {
+        if (name.equals("")) {
             logger.info("Show all users");
             users = userService.findAllUsers();
         } else {
-            logger.info("Show users with params");
-            users = userService.findAllUsers(name, surname);
+            logger.info("Show users by name");
+            users = userService.findByName(name);
+            logger.info("End getUsers");
         }
-        logger.info("End getUsers");
+        return ResponseEntity.ok(users);
+    }
+
+    // Buscar usuario por teléfono para añadir a amigos
+    @GetMapping("/user/{userId}/searchForFriend")
+    public ResponseEntity<?> findNewFriend(@PathVariable long userId, @RequestParam(name = "phone") String phone) throws UserNotFoundException {
+        logger.info("Start findNewFriend");
+        List<User> users;
+        users = userService.findNewFriend(userId, phone);
+        logger.info("End findNewFriend");
         return ResponseEntity.ok(users);
     }
 
@@ -176,9 +183,23 @@ public class UserController {
         logger.info("Search for user " + userId);
         User user = userService.findUser(userId);
         logger.info("User found. Search for favorites");
-        friendships = friendshipService.findFriendships(user);
+        friendships = friendshipService.findByUser(user);
         logger.info("End getFrienshipsByUser");
         return ResponseEntity.ok(friendships);
+    }
+
+    // Mostrar la amistad de un usuario y su amigo
+    @GetMapping("/user/{userId}/user/{friendId}/friendship")
+    public ResponseEntity<?> getFriendshipByUserAndFriend(@PathVariable long userId, @PathVariable long friendId) throws UserNotFoundException {
+        logger.info("Start getFriendshipByUserAndFriend");
+        logger.info("Search for user " + userId);
+        User user = userService.findUser(userId);
+        logger.info("User found. Search for friend" + friendId);
+        User friend = userService.findUser(friendId);
+        logger.info("Friend found. Search for friendship");
+        Friendship friendship = friendshipService.findByUserAndFriend(user, friend);
+        logger.info("End getFriendshipByUserAndFriend");
+        return ResponseEntity.ok(friendship);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

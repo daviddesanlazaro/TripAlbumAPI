@@ -11,4 +11,5 @@ import java.util.List;
 public interface FriendshipRepository extends CrudRepository<Friendship, Long> {
     List<Friendship> findAll();
     List<Friendship> findByUser(User user);
+    Friendship findByUserAndFriend(User user, User friend);
 }
