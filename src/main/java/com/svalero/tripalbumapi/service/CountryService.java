@@ -2,14 +2,14 @@ package com.svalero.tripalbumapi.service;
 
 import com.svalero.tripalbumapi.domain.Country;
 import com.svalero.tripalbumapi.exception.CountryNotFoundException;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface CountryService {
-    List<Country> findAllCountries();
-    Country findCountry(long id) throws CountryNotFoundException;
+    Flux<Country> findAllCountries();
+    Mono<Country> findCountry(String id) throws CountryNotFoundException;
 
-    Country addCountry(Country country);
-    void deleteCountry(long id) throws CountryNotFoundException;
-    Country modifyCountry(long id, Country country) throws CountryNotFoundException;
+    Mono<Country> addCountry(Country country);
+    Mono<Void> deleteCountry(String id) throws CountryNotFoundException;
+    Mono<Country> modifyCountry(String id, Country country) throws CountryNotFoundException;
 }

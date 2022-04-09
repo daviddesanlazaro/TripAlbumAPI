@@ -5,8 +5,8 @@ import com.svalero.tripalbumapi.exception.CountryNotFoundException;
 import com.svalero.tripalbumapi.repository.CountryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class CountryServiceImpl implements CountryService {
@@ -15,34 +15,31 @@ public class CountryServiceImpl implements CountryService {
     private CountryRepository countryRepository;
 
     @Override
-    public List<Country> findAllCountries() {
+    public Flux<Country> findAllCountries() {
         return countryRepository.findAll();
     }
 
     @Override
-    public Country findCountry(long id) throws CountryNotFoundException {
-        return countryRepository.findById(id)
-                .orElseThrow(CountryNotFoundException::new);
+    public Mono<Country> findCountry(String id) throws CountryNotFoundException {
+        return countryRepository.findById(id).onErrorReturn(new Country());
     }
 
     @Override
-    public Country addCountry(Country country) {
+    public Mono<Country> addCountry(Country country) {
         return countryRepository.save(country);
     }
 
     @Override
-    public void deleteCountry(long id) throws CountryNotFoundException {
-        Country country = countryRepository.findById(id)
-                .orElseThrow(CountryNotFoundException::new);
-        countryRepository.delete(country);
+    public Mono<Void> deleteCountry(String id) throws CountryNotFoundException {
+        Mono<Country> country = countryRepository.findById(id).onErrorReturn(new Country());
+        return countryRepository.deleteById(id);
     }
 
     @Override
-    public Country modifyCountry(long id, Country newCountry) throws CountryNotFoundException {
-        Country country = countryRepository.findById(id)
-                .orElseThrow(CountryNotFoundException::new);
+    public Mono<Country> modifyCountry(String id, Country newCountry) throws CountryNotFoundException {
+        Mono<Country> monoCountry = countryRepository.findById(id).onErrorReturn(new Country());
+        Country country = monoCountry.block();
         country.setName(newCountry.getName());
-
         return countryRepository.save(country);
     }
 }

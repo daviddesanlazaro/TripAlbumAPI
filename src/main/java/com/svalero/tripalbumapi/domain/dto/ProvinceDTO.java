@@ -12,5 +12,5 @@ public class ProvinceDTO {
     @NotNull
     private String name;
     @NotNull
-    private long country;
+    private String country;
 }

@@ -10,8 +10,8 @@ import com.svalero.tripalbumapi.repository.ProvinceRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
@@ -22,50 +22,45 @@ public class ProvinceServiceImpl implements ProvinceService {
     private CountryRepository countryRepository;
 
     @Override
-    public List<Province> findAllProvinces() {
+    public Flux<Province> findAllProvinces() {
         return provinceRepository.findAll();
     }
 
     @Override
-    public List<Province> findProvinces(Country country) {
+    public Flux<Province> findProvinces(Country country) {
         return provinceRepository.findByCountry(country);
     }
 
     @Override
-    public Province findProvince(long id) throws ProvinceNotFoundException {
-        return provinceRepository.findById(id)
-                .orElseThrow(ProvinceNotFoundException::new);
+    public Mono<Province> findProvince(String id) throws ProvinceNotFoundException {
+        return provinceRepository.findById(id).onErrorReturn(new Province());
     }
 
     @Override
-    public Province addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException {
-        Country country = countryRepository.findById(provinceDto.getCountry())
-                .orElseThrow(CountryNotFoundException::new);
+    public Mono<Province> addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException {
+        Mono<Country> country = countryRepository.findById(provinceDto.getCountry()).onErrorReturn(new Country());
 
         ModelMapper mapper = new ModelMapper();
         Province province = mapper.map(provinceDto, Province.class);
-        province.setCountry(country);
+        province.setCountry(country.block());
         return provinceRepository.save(province);
     }
 
     @Override
-    public void deleteProvince(long id) throws ProvinceNotFoundException {
-        Province province = provinceRepository.findById(id)
-                .orElseThrow(ProvinceNotFoundException::new);
-        provinceRepository.delete(province);
+    public Mono<Void> deleteProvince(String id) throws ProvinceNotFoundException {
+        Mono<Province> province = provinceRepository.findById(id).onErrorReturn(new Province());
+        return provinceRepository.deleteById(id);
     }
 
     @Override
-    public Province modifyProvince(long id, ProvinceDTO newProvinceDto) throws ProvinceNotFoundException, CountryNotFoundException {
-        Province province = provinceRepository.findById(id)
-                .orElseThrow(ProvinceNotFoundException::new);
-        Country country = countryRepository.findById(newProvinceDto.getCountry())
-                .orElseThrow(CountryNotFoundException::new);
+    public Mono<Province> modifyProvince(String id, ProvinceDTO newProvinceDto) throws ProvinceNotFoundException, CountryNotFoundException {
+        Mono<Province> monoProvince = provinceRepository.findById(id).onErrorReturn(new Province());
+        Mono<Country> country = countryRepository.findById(newProvinceDto.getCountry()).onErrorReturn(new Country());
 
         ModelMapper mapper = new ModelMapper();
-        province = mapper.map(newProvinceDto, Province.class);
+        Province province = mapper.map(newProvinceDto, Province.class);
         province.setId(id);
-        province.setCountry(country);
+        province.setCountry(country.block());
 
         return provinceRepository.save(province);
     }

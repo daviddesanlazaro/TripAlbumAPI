@@ -12,10 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,9 +30,9 @@ public class VisitController {
 
     // Mostrar todas las visitas
     @GetMapping("/visits")
-    public ResponseEntity<?> getVisits() {
+    public ResponseEntity<Flux<Visit>> getVisits() {
         logger.info("Start getVisits");
-        List<Visit> visits;
+        Flux<Visit> visits;
 
         visits = visitService.findAllVisits();
         logger.info("End getVisits");
@@ -38,50 +40,50 @@ public class VisitController {
     }
 
     // Mostrar una visita por ID
-    @GetMapping("/visit/{id}")
-    public ResponseEntity<?> getVisit(@PathVariable long id) throws VisitNotFoundException {
-        logger.info("Start ShowVisit " + id);
-        Visit visit = visitService.findVisit(id);
-        logger.info("End ShowVisit " + id);
+    @GetMapping("/visit/{visitId}")
+    public ResponseEntity<Mono<Visit>> getVisit(@PathVariable String visitId) throws VisitNotFoundException {
+        logger.info("Start ShowVisit " + visitId);
+        Mono<Visit> visit = visitService.findVisit(visitId);
+        logger.info("End ShowVisit " + visitId);
         return ResponseEntity.ok(visit);
     }
 
     // Eliminar una visita
-    @DeleteMapping("/visit/{id}")
-    public void removeVisit(@PathVariable long id) throws VisitNotFoundException {
-        logger.info("Start DeleteVisit " + id);
-        visitService.deleteVisit(id);
-        logger.info("End DeleteVisit " + id);
+    @DeleteMapping("/visit/{visitId}")
+    public ResponseEntity<Mono<Void>> deleteVisit(@PathVariable String visitId) throws VisitNotFoundException {
+        logger.info("Start DeleteVisit " + visitId);
+        Mono<Void> mono = visitService.deleteVisit(visitId);
+        logger.info("End DeleteVisit " + visitId);
+        return ResponseEntity.ok(mono);
     }
 
     // Insertar una visita
     @PostMapping("/visits")
-    public ResponseEntity<?> addVisit(@Valid @RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
+    public ResponseEntity<Mono<Visit>> addVisit(@Valid @RequestBody VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException, IOException {
         logger.info("Start AddVisit");
-        Visit visit = visitService.addVisit(visitDto);
+        Mono<Visit> visit = visitService.addVisit(visitDto);
         logger.info("End AddVisit");
         return ResponseEntity.ok(visit);
     }
 
     // Modificar una visita
-    @PutMapping("/visit/{id}")
-    public ResponseEntity<?> modifyVisit(@Valid @RequestBody VisitDTO visitDto, @PathVariable long id) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
-        logger.info("Start ModifyVisit " + id);
+    @PutMapping("/visit/{visitId}")
+    public ResponseEntity<Mono<Visit>> modifyVisit(@Valid @RequestBody VisitDTO visitDto, @PathVariable String visitId) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
+        logger.info("Start ModifyVisit " + visitId);
         if (visitDto.getCommentary() == null)
             visitDto.setCommentary("");
 
-        Visit newVisit = visitService.modifyVisit(id, visitDto);
-        logger.info("End ModifyVisit " + id);
+        Mono<Visit> newVisit = visitService.modifyVisit(visitId, visitDto);
+        logger.info("End ModifyVisit " + visitId);
         return ResponseEntity.ok(newVisit);
     }
 
     // Cambiar el comentario de una visita. JPQL
-    @PatchMapping("/visit/{id}")
-    public ResponseEntity<?> patchVisit(@PathVariable long id, @RequestBody String commentary) throws VisitNotFoundException {
-        logger.info("Start PatchVisit " + id);
-
-        Visit visit = visitService.patchVisit(id, commentary);
-        logger.info("End patchVisit " + id);
+    @PatchMapping("/visit/{visitId}")
+    public ResponseEntity<Mono<Visit>> patchVisit(@PathVariable String visitId, @RequestBody String commentary) throws VisitNotFoundException {
+        logger.info("Start PatchVisit " + visitId);
+        Mono<Visit> visit = visitService.patchVisit(visitId, commentary);
+        logger.info("End patchVisit " + visitId);
         return ResponseEntity.ok(visit);
     }
 

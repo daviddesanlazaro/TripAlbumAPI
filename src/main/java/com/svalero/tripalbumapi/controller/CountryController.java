@@ -16,10 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,58 +35,59 @@ public class CountryController {
 
     // Mostrar todos los países
     @GetMapping("/countries")
-    public ResponseEntity<?> getCountries() {
+    public ResponseEntity<Flux<Country>> getCountries() {
         logger.info("Start getCountries");
-        List<Country> countries;
+        Flux<Country> countries;
         countries = countryService.findAllCountries();
         logger.info("End getCountries");
         return ResponseEntity.ok(countries);
     }
 
     // Mostrar un país por ID
-    @GetMapping("/country/{id}")
-    public ResponseEntity<?> getCountry(@PathVariable long id) throws CountryNotFoundException {
-        logger.info("Start ShowCountry " + id);
-        Country country = countryService.findCountry(id);
-        logger.info("End ShowCountry " + id);
+    @GetMapping("/country/{countryId}")
+    public ResponseEntity<Mono<Country>> getCountry(@PathVariable String countryId) throws CountryNotFoundException {
+        logger.info("Start ShowCountry " + countryId);
+        Mono<Country> country = countryService.findCountry(countryId);
+        logger.info("End ShowCountry " + countryId);
         return ResponseEntity.ok(country);
     }
 
     // Eliminar un país
-    @DeleteMapping("/country/{id}")
-    public void removeCountry(@PathVariable long id) throws CountryNotFoundException {
-        logger.info("Start DeleteCountry " + id);
-        countryService.deleteCountry(id);
-        logger.info("End DeleteCountry " + id);;
+    @DeleteMapping("/country/{countryId}")
+    public ResponseEntity<Mono<Void>> deleteCountry(@PathVariable String countryId) throws CountryNotFoundException {
+        logger.info("Start DeleteCountry " + countryId);
+        Mono<Void> mono = countryService.deleteCountry(countryId);
+        logger.info("End DeleteCountry " + countryId);
+        return ResponseEntity.ok(mono);
     }
 
     // Insertar un país
     @PostMapping("/countries")
-    public ResponseEntity<?> addCountry(@Valid @RequestBody Country country) {
+    public ResponseEntity<Mono<Country>> addCountry(@Valid @RequestBody Country country) {
         logger.info("Start AddCountry");
-        Country newCountry = countryService.addCountry(country);
+        Mono<Country> newCountry = countryService.addCountry(country);
         logger.info("End AddCountry");
         return ResponseEntity.ok(newCountry);
     }
 
     // Modificar un país
-    @PutMapping("/country/{id}")
-    public ResponseEntity<?> modifyCountry(@Valid @RequestBody Country country, @PathVariable long id) throws CountryNotFoundException {
-        logger.info("Start ModifyCountry " + id);
-        Country newCountry = countryService.modifyCountry(id, country);
-        logger.info("End ModifyCountry " + id);
+    @PutMapping("/country/{countryId}")
+    public ResponseEntity<Mono<Country>> modifyCountry(@Valid @RequestBody Country country, @PathVariable String countryId) throws CountryNotFoundException {
+        logger.info("Start ModifyCountry " + countryId);
+        Mono<Country> newCountry = countryService.modifyCountry(countryId, country);
+        logger.info("End ModifyCountry " + countryId);
         return ResponseEntity.ok(newCountry);
     }
 
     // Mostrar todas las provincias de un país
     @GetMapping("/country/{countryId}/provinces")
-    public ResponseEntity<?> getProvinces(@PathVariable long countryId) throws CountryNotFoundException {
+    public ResponseEntity<Flux<Province>> getProvinces(@PathVariable String countryId) throws CountryNotFoundException {
         logger.info("Start getProvincesByCountry");
-        List<Province> provinces = null;
+        Flux<Province> provinces = null;
         logger.info("Search for country " + countryId);
-        Country country = countryService.findCountry(countryId);
+        Mono<Country> country = countryService.findCountry(countryId);
         logger.info("Country found. Search for provinces");
-        provinces = provinceService.findProvinces(country);
+        provinces = provinceService.findProvinces(country.block());
         logger.info("End getProvincesByCountry");
         return ResponseEntity.ok(provinces);
     }

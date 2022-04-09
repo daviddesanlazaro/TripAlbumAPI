@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,43 +16,30 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "User")
-@Table(name = "users")
+@Document(value = "users")
 
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column
+    @Field
     @NotNull
-    private String name;
+    private String username;
 
-    @Column
+    @Field
     @NotNull
-    private String surname;
+    private String password;
 
-    @Column
+    @Field
     @Email
     private String email;
 
-    @Column
+    @Field
     @Pattern(regexp = "[0-9]{9}")
     private String phone;
-
-    @Column(name = "send_data")
-    private boolean sendData;
 
     @OneToMany(mappedBy = "user")
     @JsonBackReference(value = "user-visit")
     private List<Visit> visits;
-
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference(value = "user-favorite")
-    private List<Favorite> favorites;
-
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference(value = "user-friend")
-    private List<Friendship> friends;
 }

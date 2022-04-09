@@ -3,18 +3,15 @@ package com.svalero.tripalbumapi.repository;
 import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.domain.Visit;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Repository
-public interface VisitRepository extends CrudRepository<Visit, Long>  {
-    List<Visit> findAll();
-    List<Visit> findByUser(User user);
-    List<Visit> findByPlace(Place place);
-
-    // Mostrar las visitas realizadas por un usuario determinado a un lugar determinado
-    List<Visit> findByUserAndPlace(User user, Place place);
+public interface VisitRepository extends ReactiveMongoRepository<Visit, String> {
+    Flux<Visit> findAll();
+    Flux<Visit> findByUser(User user);
+    Flux<Visit> findByPlace(Place place);
+    Flux<Visit> findByUserAndPlace(User user, Place place);
 
 }

@@ -11,8 +11,8 @@ import com.svalero.tripalbumapi.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class VisitServiceImpl implements VisitService {
@@ -25,75 +25,71 @@ public class VisitServiceImpl implements VisitService {
     private PlaceRepository placeRepository;
 
     @Override
-    public List<Visit> findAllVisits() {
+    public Flux<Visit> findAllVisits() {
         return visitRepository.findAll();
     }
 
     @Override
-    public List<Visit> findVisitsByUser(User user) {
+    public Flux<Visit> findVisitsByUser(User user) {
         return visitRepository.findByUser(user);
     }
 
     @Override
-    public List<Visit> findVisitsByPlace(Place place) {
+    public Flux<Visit> findVisitsByPlace(Place place) {
         return visitRepository.findByPlace(place);
     }
 
     @Override
-    public Visit findVisit(long id) throws VisitNotFoundException {
-        return visitRepository.findById(id)
-                .orElseThrow(VisitNotFoundException::new);
+    public Mono<Visit> findVisit(String id) throws VisitNotFoundException {
+        return visitRepository.findById(id).onErrorReturn(new Visit());
     }
 
     @Override
-    public Visit addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
-        User user = userRepository.findById(visitDto.getUser())
-                .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(visitDto.getPlace())
-                .orElseThrow(PlaceNotFoundException::new);
-
-        Visit visit = new Visit (0, user, place, visitDto.getDate(), visitDto.getRating(), visitDto.getCommentary(), visitDto.getImage());
-        return visitRepository.save(visit);
-    }
-
-    @Override
-    public void deleteVisit(long id) throws VisitNotFoundException {
-        Visit visit = visitRepository.findById(id)
-                .orElseThrow(VisitNotFoundException::new);
-        visitRepository.delete(visit);
-    }
-
-    @Override
-    public Visit modifyVisit(long id, VisitDTO newVisitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
-        Visit visit = visitRepository.findById(id)
-                .orElseThrow(VisitNotFoundException::new);
-        User user = userRepository.findById(newVisitDto.getUser())
-                .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(newVisitDto.getPlace())
-                .orElseThrow(PlaceNotFoundException::new);
+    public Mono<Visit> addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
+        Mono<User> user = userRepository.findById(visitDto.getUser()).onErrorReturn(new User());
+        Mono<Place> place = placeRepository.findById(visitDto.getPlace()).onErrorReturn(new Place());
 
         ModelMapper mapper = new ModelMapper();
-        visit = mapper.map(newVisitDto, Visit.class);
-        visit.setId(id);
-        visit.setUser(user);
-        visit.setPlace(place);
+        Visit visit = mapper.map(visitDto, Visit.class);
+        visit.setUser(user.block());
+        visit.setPlace(place.block());
+//        byte[] bytes = visitDto.getImage().getBytes(StandardCharsets.UTF_8);
+//        visit.setImage(visitDto.getImage());
         return visitRepository.save(visit);
     }
 
     @Override
-    public Visit patchVisit(long id, String commentary) throws VisitNotFoundException {
-        Visit visit = visitRepository.findById(id)
-                .orElseThrow(VisitNotFoundException::new);
+    public Mono<Void> deleteVisit(String id) throws VisitNotFoundException {
+        Mono<Visit> visit = visitRepository.findById(id).onErrorReturn(new Visit());
+        return visitRepository.deleteById(id);
+    }
+
+    @Override
+    public Mono<Visit> modifyVisit(String id, VisitDTO visitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
+        Mono<Visit> monoVisit = visitRepository.findById(id).onErrorReturn(new Visit());
+        Mono<User> user = userRepository.findById(visitDto.getUser()).onErrorReturn(new User());
+        Mono<Place> place = placeRepository.findById(visitDto.getPlace()).onErrorReturn(new Place());
+
+        ModelMapper mapper = new ModelMapper();
+        Visit visit = mapper.map(visitDto, Visit.class);
+        visit.setId(id);
+        visit.setUser(user.block());
+        visit.setPlace(place.block());
+        return visitRepository.save(visit);
+    }
+
+    @Override
+    public Mono<Visit> patchVisit(String id, String commentary) throws VisitNotFoundException {
+        Mono<Visit> monoVisit = visitRepository.findById(id).onErrorReturn(new Visit());
+        Visit visit = monoVisit.block();
         visit.setCommentary(commentary);
         return visitRepository.save(visit);
     }
 
     @Override
-    public List<Visit> findByUserAndPlace(long userId, long placeId) throws UserNotFoundException, PlaceNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
-        return visitRepository.findByUserAndPlace(user, place);
+    public Flux<Visit> findByUserAndPlace(String userId, String placeId) throws UserNotFoundException, PlaceNotFoundException {
+        Mono<User> user = userRepository.findById(userId).onErrorReturn(new User());
+        Mono<Place> place = placeRepository.findById(placeId).onErrorReturn(new Place());
+        return visitRepository.findByUserAndPlace(user.block(), place.block());
     }
 }

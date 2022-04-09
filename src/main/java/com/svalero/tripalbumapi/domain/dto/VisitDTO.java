@@ -13,14 +13,14 @@ import java.time.LocalDate;
 
 public class VisitDTO {
     @NotNull
-    private long user;
+    private String user;
     @NotNull
-    private long place;
+    private String place;
     @NotNull
     private LocalDate date;
     @Min(value = 0)
     @Max(value = 10)
     private float rating;
     private String commentary;
-    private byte[] image;
+    private String image;
 }

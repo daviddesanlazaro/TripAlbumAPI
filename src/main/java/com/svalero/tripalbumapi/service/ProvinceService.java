@@ -5,15 +5,15 @@ import com.svalero.tripalbumapi.domain.Province;
 import com.svalero.tripalbumapi.domain.dto.ProvinceDTO;
 import com.svalero.tripalbumapi.exception.CountryNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface ProvinceService {
-    List<Province> findAllProvinces();
-    List<Province> findProvinces(Country country);
-    Province findProvince(long id) throws ProvinceNotFoundException;
+    Flux<Province> findAllProvinces();
+    Flux<Province> findProvinces(Country country);
+    Mono<Province> findProvince(String id) throws ProvinceNotFoundException;
 
-    Province addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException;
-    void deleteProvince(long id) throws ProvinceNotFoundException;
-    Province modifyProvince(long id, ProvinceDTO provinceDto) throws ProvinceNotFoundException, CountryNotFoundException;
+    Mono<Province> addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException;
+    Mono<Void> deleteProvince(String id) throws ProvinceNotFoundException;
+    Mono<Province> modifyProvince(String id, ProvinceDTO provinceDto) throws ProvinceNotFoundException, CountryNotFoundException;
 }

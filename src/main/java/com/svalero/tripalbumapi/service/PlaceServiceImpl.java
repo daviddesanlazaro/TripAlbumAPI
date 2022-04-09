@@ -11,8 +11,8 @@ import com.svalero.tripalbumapi.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class PlaceServiceImpl implements PlaceService {
@@ -25,83 +25,63 @@ public class PlaceServiceImpl implements PlaceService {
     private UserRepository userRepository;
 
     @Override
-    public List<Place> findAllPlaces() {
+    public Flux<Place> findAllPlaces() {
         return placeRepository.findAll();
     }
 
     @Override
-    public List<Place> findPlaces(Province province) {
+    public Flux<Place> findPlaces(Province province) {
         return placeRepository.findByProvince(province);
     }
 
     @Override
-    public Place findPlace(long id) throws PlaceNotFoundException {
-        return placeRepository.findById(id)
-                .orElseThrow(PlaceNotFoundException::new);
+    public Mono<Place> findPlace(String id) throws PlaceNotFoundException {
+        return placeRepository.findById(id).onErrorReturn(new Place());
     }
 
     @Override
-    public Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException {
-        Province province = provinceRepository.findById(placeDto.getProvince())
-                .orElseThrow(ProvinceNotFoundException::new);
-
+    public Mono<Place> addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException {
+        Mono<Province> province = provinceRepository.findById(placeDto.getProvince()).onErrorReturn(new Province());
         ModelMapper mapper = new ModelMapper();
         Place place = mapper.map(placeDto, Place.class);
-        place.setProvince(province);
+        place.setProvince(province.block());
         return placeRepository.save(place);
     }
 
     @Override
-    public void deletePlace(long id) throws PlaceNotFoundException {
-        Place place = placeRepository.findById(id)
-                .orElseThrow(PlaceNotFoundException::new);
-        placeRepository.delete(place);
+    public Mono<Void> deletePlace(String id) throws PlaceNotFoundException {
+        Mono<Place> place = placeRepository.findById(id).onErrorReturn(new Place());
+        return placeRepository.deleteById(id);
     }
 
     @Override
-    public Place modifyPlace(long id, PlaceDTO newPlaceDto) throws PlaceNotFoundException, ProvinceNotFoundException {
-        Place place = placeRepository.findById(id)
-                .orElseThrow(PlaceNotFoundException::new);
-        Province province = provinceRepository.findById(newPlaceDto.getProvince())
-                .orElseThrow(ProvinceNotFoundException::new);
+    public Mono<Place> modifyPlace(String id, PlaceDTO newPlaceDto) throws PlaceNotFoundException, ProvinceNotFoundException {
+        Mono<Place> monoPlace = placeRepository.findById(id).onErrorReturn(new Place());
+        Mono<Province> province = provinceRepository.findById(newPlaceDto.getProvince()).onErrorReturn(new Province());
 
         ModelMapper mapper = new ModelMapper();
-        place = mapper.map(newPlaceDto, Place.class);
+        Place place = mapper.map(newPlaceDto, Place.class);
         place.setId(id);
-        place.setProvince(province);
+        place.setProvince(province.block());
 
         return placeRepository.save(place);
     }
 
     @Override
-    public Place patchPlace(long id, String description) throws PlaceNotFoundException {
-        Place place = placeRepository.findById(id)
-                .orElseThrow(PlaceNotFoundException::new);
+    public Mono<Place> patchPlace(String id, String description) throws PlaceNotFoundException {
+        Mono<Place> monoPlace = placeRepository.findById(id).onErrorReturn(new Place());
+        Place place = monoPlace.block();
         place.setDescription(description);
         return placeRepository.save(place);
     }
 
     @Override
-    public float averageRating(long placeId) throws PlaceNotFoundException {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
-        return placeRepository.averageRating(placeId);
-    }
-
-    @Override
-    public int numVisits(long placeId) throws PlaceNotFoundException {
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(PlaceNotFoundException::new);
-        return placeRepository.numVisits(placeId);
-    }
-
-    @Override
-    public List<Place> findBySearch(String name) {
+    public Flux<Place> findBySearch(String name) {
         return placeRepository.findByNameContains(name);
     }
 
     @Override
-    public List<Place> findByProvinceAndSearch(Province province, String name) {
+    public Flux<Place> findByProvinceAndSearch(Province province, String name) {
         return placeRepository.findByProvinceAndNameContains(province, name);
     }
 }

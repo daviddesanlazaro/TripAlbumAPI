@@ -1,32 +1,13 @@
 package com.svalero.tripalbumapi.repository;
 
-import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
-    List<User> findAll();
-    List<User> findByName(String name);
-
-    // Buscar usuario por teléfono para añadir a amigos
-//    @Query("SELECT u FROM User u WHERE NOT id = ?1")
-    @Query("SELECT u FROM User u WHERE NOT id = ALL (SELECT f.friend FROM Friendship f WHERE f.user = ?1) AND NOT id = ?1 AND phone = ?2")
-    List<User> findNewFriend(User user, String phone);
-
-    // Mostrar los lugares que ha visitado un usuario
-    @Query("SELECT p FROM Place p WHERE id = ANY (SELECT v.place FROM Visit v WHERE v.user = ?1)")
-    List<Place> findPlacesUser(User user);
-
-    // Mostrar los lugares favoritos de un usuario
-    @Query("SELECT p FROM Place p WHERE id = ANY (SELECT f.place FROM Favorite f WHERE f.user = ?1)")
-    List<Place> findFavoritePlacesUser(User user);
-
-    // Mostrar los amigos de un usuario
-    @Query("SELECT u FROM User u WHERE id = ANY (SELECT f.friend FROM Friendship f WHERE f.user = ?1)")
-    List<User> findFriendsUser(User user);
+public interface UserRepository extends ReactiveMongoRepository<User, String> {
+    Flux<User> findAll();
+    Flux<User> findByUsername(String username);
+    Flux<User> findByPhone(String phone);
 }

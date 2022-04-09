@@ -3,6 +3,8 @@ package com.svalero.tripalbumapi.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -13,14 +15,12 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Visit")
-@Table(name = "visits")
+@Document(value = "visits")
 
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,19 +32,18 @@ public class Visit {
     @NotNull
     private Place place;
 
-    @Column
+    @Field
     @NotNull
     private LocalDate date;
 
-    @Column
+    @Field
     @Min(value = 0)
     @Max(value = 10)
     private float rating;
 
-    @Column
+    @Field
     private String commentary;
 
-    @Lob
-    @Column(name = "image", columnDefinition = "LONGBLOB")
-    private byte[] image;
+    @Field
+    private String image;
 }

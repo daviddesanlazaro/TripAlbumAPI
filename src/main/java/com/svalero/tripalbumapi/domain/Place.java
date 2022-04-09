@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,28 +14,26 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Place")
-@Table(name = "places")
+@Document(value = "places")
 
 public class Place {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column
+    @Field
     @NotNull
     private String name;
 
-    @Column
+    @Field
     @NotNull
     private String description;
 
-    @Column
+    @Field
     @NotNull
     private float latitude;
 
-    @Column
+    @Field
     @NotNull
     private float longitude;
 
@@ -45,8 +45,4 @@ public class Place {
     @OneToMany(mappedBy = "place")
     @JsonBackReference(value = "place-visit")
     private List<Visit> visits;
-
-    @OneToMany(mappedBy = "place")
-    @JsonBackReference(value = "place-favorite")
-    private List<Favorite> favorites;
 }
