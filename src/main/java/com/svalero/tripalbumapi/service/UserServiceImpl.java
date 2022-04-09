@@ -1,13 +1,12 @@
 package com.svalero.tripalbumapi.service;
 
-import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
 import com.svalero.tripalbumapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,79 +15,54 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<User> findAllUsers() {
+    public Flux<User> findAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User findUser(long id) throws UserNotFoundException {
-        return userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+    public Mono<User> findUser(String id) throws UserNotFoundException {
+        return userRepository.findById(id).onErrorReturn(new User());
     }
 
     @Override
-    public List<User> findByName(String name) {
-        return userRepository.findByName(name);
+    public Flux<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
-    public List<User> findNewFriend(long id, String phone) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        return userRepository.findNewFriend(user, phone);
+    public Flux<User> findByPhone(String phone) {
+        return userRepository.findByPhone(phone).onErrorReturn(new User());
     }
 
     @Override
-    public User addUser(User user) {
+    public Mono<User> addUser(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(long id) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        userRepository.delete(user);
+    public Mono<Void> deleteUser(String id) throws UserNotFoundException {
+        Mono<User> user = userRepository.findById(id).onErrorReturn(new User());
+        return userRepository.deleteById(id);
     }
 
     @Override
-    public User modifyUser(long id, User newUser) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
-        user.setName(newUser.getName());
-        user.setSurname(newUser.getSurname());
+    public Mono<User> modifyUser(String id, User newUser) throws UserNotFoundException {
+        Mono<User> monoUser = userRepository.findById(id).onErrorReturn(new User());
+
+        User user = monoUser.block();
+        user.setUsername(newUser.getUsername());
+        user.setPassword(newUser.getPassword());
         user.setEmail(newUser.getEmail());
         user.setPhone(newUser.getPhone());
-        user.setSendData(newUser.isSendData());
 
         return userRepository.save(user);
     }
 
     @Override
-    public User patchUser(long id, String email) throws UserNotFoundException {
-        User user = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+    public Mono<User> patchUser(String id, String email) throws UserNotFoundException {
+        Mono<User> monoUser = userRepository.findById(id).onErrorReturn(new User());
+        User user = monoUser.block();
         user.setEmail(email);
         return userRepository.save(user);
-    }
-
-    @Override
-    public List<Place> findPlacesUser(User user) throws UserNotFoundException {
-        user = userRepository.findById(user.getId())
-                .orElseThrow(UserNotFoundException::new);
-        return userRepository.findPlacesUser(user);
-    }
-
-    @Override
-    public List<Place> findFavoritePlacesUser(User user) throws UserNotFoundException {
-        user = userRepository.findById(user.getId())
-                .orElseThrow(UserNotFoundException::new);
-        return userRepository.findFavoritePlacesUser(user);
-    }
-
-    @Override
-    public List<User> findFriendsUser(User user) throws UserNotFoundException {
-        user = userRepository.findById(user.getId())
-                .orElseThrow(UserNotFoundException::new);
-        return userRepository.findFriendsUser(user);
     }
 }

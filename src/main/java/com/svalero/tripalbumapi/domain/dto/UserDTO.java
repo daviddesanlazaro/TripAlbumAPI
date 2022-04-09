@@ -12,12 +12,11 @@ import javax.validation.constraints.Pattern;
 
 public class UserDTO {
     @NotNull
-    private String name;
+    private String username;
     @NotNull
-    private String surname;
+    private String password;
     @Email
     private String email;
     @Pattern(regexp = "[0-9]{9}")
     private String phone;
-    private boolean sendData;
 }

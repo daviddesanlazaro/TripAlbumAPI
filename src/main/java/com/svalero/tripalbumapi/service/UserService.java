@@ -1,23 +1,18 @@
 package com.svalero.tripalbumapi.service;
 
-import com.svalero.tripalbumapi.domain.Place;
 import com.svalero.tripalbumapi.domain.User;
 import com.svalero.tripalbumapi.exception.UserNotFoundException;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface UserService {
-    List<User> findAllUsers();
-    User findUser(long id) throws UserNotFoundException;
-    List<User> findByName(String name);
-    List<User> findNewFriend(long id, String phone) throws UserNotFoundException;
+    Flux<User> findAllUsers();
+    Mono<User> findUser(String id) throws UserNotFoundException;
+    Flux<User> findByUsername(String username);
+    Flux<User> findByPhone(String phone);
 
-    User addUser(User user);
-    void deleteUser(long id) throws UserNotFoundException;
-    User modifyUser(long id, User user) throws UserNotFoundException;
-    User patchUser(long id, String email) throws UserNotFoundException;
-
-    List<Place> findPlacesUser(User user) throws UserNotFoundException;
-    List<Place> findFavoritePlacesUser(User user) throws UserNotFoundException;
-    List<User> findFriendsUser(User user) throws UserNotFoundException;
+    Mono<User> addUser(User user);
+    Mono<Void> deleteUser(String id) throws UserNotFoundException;
+    Mono<User> modifyUser(String id, User user) throws UserNotFoundException;
+    Mono<User> patchUser(String id, String email) throws UserNotFoundException;
 }

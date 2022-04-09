@@ -18,6 +18,5 @@ public class PlaceDTO {
     @NotNull
     private float longitude;
     @NotNull
-    private long province;
-
+    private String province;
 }

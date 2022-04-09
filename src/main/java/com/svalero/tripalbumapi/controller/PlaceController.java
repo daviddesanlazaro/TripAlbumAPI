@@ -14,10 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,9 +33,9 @@ public class PlaceController {
 
     // Mostrar todos los lugares
     @GetMapping("/places")
-    public ResponseEntity<?> getPlaces(@RequestParam (name = "name", required = false, defaultValue = "") String name) {
+    public ResponseEntity<Flux<Place>> getPlaces(@RequestParam (name = "name", required = false, defaultValue = "") String name) {
         logger.info("Start getPlaces");
-        List<Place> places;
+        Flux<Place> places;
         if (name.equals("")) {
             logger.info("Show all places");
             places = placeService.findAllPlaces();
@@ -47,78 +48,61 @@ public class PlaceController {
     }
 
     // Mostrar un lugar por ID
-    @GetMapping("/place/{id}")
-    public ResponseEntity<?> getPlace(@PathVariable long id) throws PlaceNotFoundException {
-        logger.info("Start ShowPlace " + id);
-        Place place = placeService.findPlace(id);
-        logger.info("End ShowPlace " + id);
+    @GetMapping("/place/{placeId}")
+    public ResponseEntity<Mono<Place>> getPlace(@PathVariable String placeId) throws PlaceNotFoundException {
+        logger.info("Start ShowPlace " + placeId);
+        Mono<Place> place = placeService.findPlace(placeId);
+        logger.info("End ShowPlace " + placeId);
         return ResponseEntity.ok(place);
     }
 
     // Eliminar un lugar
-    @DeleteMapping("/place/{id}")
-    public void removePlace(@PathVariable long id) throws PlaceNotFoundException {
-        logger.info("Start DeletePlace " + id);
-        placeService.deletePlace(id);
-        logger.info("End DeletePlace " + id);
+    @DeleteMapping("/place/{placeId}")
+    public ResponseEntity<Mono<Void>> deletePlace(@PathVariable String placeId) throws PlaceNotFoundException {
+        logger.info("Start DeletePlace " + placeId);
+        Mono<Void> mono = placeService.deletePlace(placeId);
+        logger.info("End DeletePlace " + placeId);
+        return ResponseEntity.ok(mono);
     }
 
     // Insertar un lugar
     @PostMapping("/places")
-    public ResponseEntity<?> addPlace(@Valid @RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
+    public ResponseEntity<Mono<Place>> addPlace(@Valid @RequestBody PlaceDTO placeDto) throws ProvinceNotFoundException {
         logger.info("Start AddPlace");
-        Place place = placeService.addPlace(placeDto);
+        Mono<Place> place = placeService.addPlace(placeDto);
         logger.info("End AddPlace");
         return ResponseEntity.ok(place);
     }
 
     // Modificar un lugar
-    @PutMapping("/place/{id}")
-    public ResponseEntity<?> modifyPlace(@Valid @RequestBody PlaceDTO placeDto, @PathVariable long id) throws PlaceNotFoundException, ProvinceNotFoundException {
-        logger.info("Start ModifyPlace " + id);
-        Place newPlace = placeService.modifyPlace(id, placeDto);
-        logger.info("End ModifyPlace " + id);
+    @PutMapping("/place/{placeId}")
+    public ResponseEntity<Mono<Place>> modifyPlace(@Valid @RequestBody PlaceDTO placeDto, @PathVariable String placeId) throws PlaceNotFoundException, ProvinceNotFoundException {
+        logger.info("Start ModifyPlace " + placeId);
+        Mono<Place> newPlace = placeService.modifyPlace(placeId, placeDto);
+        logger.info("End ModifyPlace " + placeId);
         return ResponseEntity.ok(newPlace);
     }
 
     // Mostrar todas las visitas de un lugar
     @GetMapping("/place/{placeId}/visits")
-    public ResponseEntity<?> getVisitsByPlace(@PathVariable long placeId) throws PlaceNotFoundException {
+    public ResponseEntity<Flux<Visit>> getVisitsByPlace(@PathVariable String placeId) throws PlaceNotFoundException {
         logger.info("Start getVisitsByPlace");
-        List<Visit> visits = null;
+        Flux<Visit> visits = null;
         logger.info("Search for place " + placeId);
-        Place place = placeService.findPlace(placeId);
+        Mono<Place> place = placeService.findPlace(placeId);
         logger.info("Place found. Search for visits");
-        visits = visitService.findVisitsByPlace(place);
+        visits = visitService.findVisitsByPlace(place.block());
         logger.info("End getVisitsByPlace");
         return ResponseEntity.ok(visits);
     }
 
     // Cambiar la descripción de un lugar
-    @PatchMapping("/place/{id}")
-    public ResponseEntity<?> patchPlace(@PathVariable long id, @Valid @RequestBody String description) throws PlaceNotFoundException {
-        logger.info("Start PatchPlace " + id);
-        Place place = placeService.patchPlace(id, description);
-        logger.info("End patchPlace " + id);
+    @PatchMapping("/place/{placeId}")
+    public ResponseEntity<Mono<Place>> patchPlace(@PathVariable String placeId, @Valid @RequestBody String description) throws PlaceNotFoundException {
+        logger.info("Start PatchPlace " + placeId);
+        Mono<Place> place = placeService.patchPlace(placeId, description);
+        logger.info("End patchPlace " + placeId);
         return ResponseEntity.ok(place);
-    }
-
-    // Mostrar la valoración media de un lugar. SQL
-    @GetMapping("/place/{id}/rating")
-    public ResponseEntity<?> averageRating(@PathVariable long id) throws PlaceNotFoundException {
-        logger.info("Start averageRating " + id);
-        float rating = placeService.averageRating(id);
-        logger.info("End averageRating " + id);
-        return ResponseEntity.ok(rating);
-    }
-
-    // Contar las visitas totales de un lugar. SQL
-    @GetMapping("/place/{id}/numVisits")
-    public ResponseEntity<?> numVisits(@PathVariable long id) throws PlaceNotFoundException {
-        logger.info("Start numVisits " + id);
-        int visits = placeService.numVisits(id);
-        logger.info("End numVisits " + id);
-        return ResponseEntity.ok(visits);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

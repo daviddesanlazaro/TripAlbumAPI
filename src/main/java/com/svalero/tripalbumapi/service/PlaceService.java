@@ -5,22 +5,19 @@ import com.svalero.tripalbumapi.domain.Province;
 import com.svalero.tripalbumapi.domain.dto.PlaceDTO;
 import com.svalero.tripalbumapi.exception.PlaceNotFoundException;
 import com.svalero.tripalbumapi.exception.ProvinceNotFoundException;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface PlaceService {
-    List<Place> findAllPlaces();
-    List<Place> findPlaces(Province province);
-    Place findPlace(long id) throws PlaceNotFoundException;
+    Flux<Place> findAllPlaces();
+    Flux<Place> findPlaces(Province province);
+    Mono<Place> findPlace(String id) throws PlaceNotFoundException;
 
-    Place addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException;
-    void deletePlace(long id) throws PlaceNotFoundException;
-    Place modifyPlace(long id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
-    Place patchPlace(long id, String description) throws PlaceNotFoundException;
+    Mono<Place> addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException;
+    Mono<Void> deletePlace(String id) throws PlaceNotFoundException;
+    Mono<Place> modifyPlace(String id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException;
+    Mono<Place> patchPlace(String id, String description) throws PlaceNotFoundException;
 
-    float averageRating(long placeId) throws PlaceNotFoundException;
-    int numVisits(long placeId) throws PlaceNotFoundException;
-
-    List<Place> findBySearch(String name);
-    List<Place> findByProvinceAndSearch(Province province, String name);
+    Flux<Place> findBySearch(String name);
+    Flux<Place> findByProvinceAndSearch(Province province, String name);
 }

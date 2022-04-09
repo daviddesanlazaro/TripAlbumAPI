@@ -14,10 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -32,64 +33,65 @@ public class ProvinceController {
 
     // Mostrar todas las provincias
     @GetMapping("/provinces")
-    public ResponseEntity<?> getProvinces() {
+    public ResponseEntity<Flux<Province>> getProvinces() {
         logger.info("Start getProvinces");
-        List<Province> provinces;
+        Flux<Province> provinces;
         provinces = provinceService.findAllProvinces();
         logger.info("End getProvinces");
         return ResponseEntity.ok(provinces);
     }
 
     // Mostrar una provincia por ID
-    @GetMapping("/province/{id}")
-    public ResponseEntity<?> getProvince(@PathVariable long id) throws ProvinceNotFoundException {
-        logger.info("Start ShowProvince " + id);
-        Province province = provinceService.findProvince(id);
-        logger.info("End ShowProvince " + id);
+    @GetMapping("/province/{provinceId}")
+    public ResponseEntity<Mono<Province>> getProvince(@PathVariable String provinceId) throws ProvinceNotFoundException {
+        logger.info("Start ShowProvince " + provinceId);
+        Mono<Province> province = provinceService.findProvince(provinceId);
+        logger.info("End ShowProvince " + provinceId);
         return ResponseEntity.ok(province);
     }
 
     // Eliminar una provincia
-    @DeleteMapping("/province/{id}")
-    public void removeProvince(@PathVariable long id) throws ProvinceNotFoundException {
-        logger.info("Start DeleteProvince " + id);
-        provinceService.deleteProvince(id);
-        logger.info("End DeleteProvince " + id);
+    @DeleteMapping("/province/{provinceId}")
+    public ResponseEntity<Mono<Void>> deleteProvince(@PathVariable String provinceId) throws ProvinceNotFoundException {
+        logger.info("Start DeleteProvince " + provinceId);
+        Mono<Void> mono = provinceService.deleteProvince(provinceId);
+        logger.info("End DeleteProvince " + provinceId);
+        return ResponseEntity.ok(mono);
     }
 
     // Insertar una provincia
     @PostMapping("/provinces")
-    public ResponseEntity<?> addProvince(@Valid @RequestBody ProvinceDTO provinceDto) throws CountryNotFoundException {
+    public ResponseEntity<Mono<Province>> addProvince(@Valid @RequestBody ProvinceDTO provinceDto) throws CountryNotFoundException {
         logger.info("Start AddProvince");
-        Province province = provinceService.addProvince(provinceDto);
+        Mono<Province> province = provinceService.addProvince(provinceDto);
         logger.info("End AddProvince");
         return ResponseEntity.ok(province);
     }
 
     // Modificar una provincia
-    @PutMapping("/province/{id}")
-    public ResponseEntity<?> modifyProvince(@Valid @RequestBody ProvinceDTO provinceDto, @PathVariable long id) throws ProvinceNotFoundException, CountryNotFoundException {
-        logger.info("Start ModifyProvince " + id);
-        Province newProvince = provinceService.modifyProvince(id, provinceDto);
-        logger.info("End ModifyProvince " + id);
+    @PutMapping("/province/{provinceId}")
+    public ResponseEntity<Mono<Province>> modifyProvince(@Valid @RequestBody ProvinceDTO provinceDto, @PathVariable String provinceId) throws ProvinceNotFoundException, CountryNotFoundException {
+        logger.info("Start ModifyProvince " + provinceId);
+        Mono<Province> newProvince = provinceService.modifyProvince(provinceId, provinceDto);
+        logger.info("End ModifyProvince " + provinceId);
         return ResponseEntity.ok(newProvince);
     }
 
     // Mostrar todos los lugares de una provincia
     @GetMapping("/province/{provinceId}/places")
-    public ResponseEntity<?> getPlaces(@PathVariable long provinceId,
+    public ResponseEntity<Flux<Place>> getPlaces(@PathVariable String provinceId,
                @RequestParam (name = "name", required = false, defaultValue = "") String name) throws ProvinceNotFoundException {
         logger.info("Start getPlacesByProvince");
-        List<Place> places = null;
+        Flux<Place> places = null;
         logger.info("Search for province " + provinceId);
-        Province province = provinceService.findProvince(provinceId);
+        Mono<Province> province = provinceService.findProvince(provinceId);
         logger.info("Province found. Search for places");
         if (name.equals("")) {
             logger.info("Show all places");
-            places = placeService.findPlaces(province);
+            places = placeService.findPlaces(province.block());
         } else {
             logger.info("Show places with search");
-            places = placeService.findByProvinceAndSearch(province, name);
+            places = placeService.findByProvinceAndSearch(province.block(), name);
         }
 
         logger.info("End getPlacesByProvince");
