@@ -22,24 +22,24 @@ paths:
       tags:
         - users
       summary: Lista de usuarios
-      description: Mostrar la lista de usuarios. Permite filtrar por nombre o apellido.
+      description: Mostrar la lista de usuarios. Permite filtrar por nombre de usuario o teléfono.
       operationId: getUsers
       parameters:
-        - name: name
+        - name: username
           in: query
-          description: Nombre del usuario
+          description: Nombre de usuario
           required: false
           schema:
             type: string
-            example: Antonio
+            example: "nombreusuario"
             default: null        
-        - name: surname
+        - name: phone
           in: query
-          description: Apellido del usuario
+          description: Número de teléfono
           required: false
           schema:
             type: string
-            example: García
+            example: "123456789"
             default: null
       responses:
         '200':
@@ -50,6 +50,17 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+              example:
+              - id: "abc123"
+                username: "antonio"
+                password: "1234"
+                email: "antonio@email.com"
+                phone: "123456789"
+              - id: "123abc"
+                username: "francisco"
+                password: "1234"
+                email: "francisco@email.com"
+                phone: "123456789"
         '500':
           description: Error interno del servidor
           content:
@@ -69,6 +80,19 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/UserIn'
+          examples:
+            Antonio:
+              value:
+                username: "antonio"
+                password: "1234"
+                email: "antonio@email.com"
+                phone: "123456789"
+            Francisco:
+              value:
+                username: "francisco"
+                password: "pass"
+                email: "francisco@email.com"
+                phone: "987654321"
       responses:
         '201':
           description: Se ha registrado correctamente
@@ -101,9 +125,8 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -111,6 +134,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+              examples:
+                Antonio:
+                  value:
+                    id: "1"
+                    username: "antonio"
+                    password: "1234"
+                    email: "antonio@email.com"
+                    phone: "123456789"
+                Francisco:
+                  value:
+                    id: "2"
+                    username: "francisco"
+                    password: "pass"
+                    email: "francisco@email.com"
+                    phone: "987654321"
         '404':
           description: No se ha encontrado el usuario
           content:
@@ -135,9 +173,8 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '204':
           description: No content
@@ -165,9 +202,8 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevos datos del usuario
         required: true
@@ -175,6 +211,19 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/UserIn'
+          examples:
+            Antonio:
+              value:
+                username: "antonio"
+                password: "1234"
+                email: "antonio@email.com"
+                phone: "123456789"
+            Francisco:
+              value:
+                username: "francisco"
+                password: "pass"
+                email: "francisco@email.com"
+                phone: "987654321"
       responses:
         '200':
           description: Ok
@@ -212,9 +261,8 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevo email
         required: true
@@ -222,7 +270,11 @@ paths:
          application/json:
           schema:
             type: string
-            example: "nuevo@email.com"
+          examples:
+            Antonio:
+              value: "antonio@email.com"
+            Francisco:
+              value: "francisco@email.com"
       responses:
         '200':
           description: Ok
@@ -262,9 +314,8 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -274,44 +325,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Visit'
-        '404':
-          description: No se ha encontrado el usuario
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResourceNotFound'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /user/{userId}/places:
-    get:
-      tags:
-        - users
-        - places
-      summary: Mostrar lugares visitados por un usuario
-      description: Mostrar todos los lugares que ha visitado un usuario determinado por su ID.
-      operationId: getUserPlaces
-      parameters:
-        - name: userId
-          in: path
-          description: Id del usuario
-          required: true
-          schema:
-            type: number
-            format: int64
-            example: 1
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Place'
+              example:
+              - id: "abc123"
+                date: "2020-01-01"
+                commentary: "Comentario de la visita 1"
+                rating: 2.5
+                user: "abc123"
+                place: "abc123"
+              - id: "123abc"
+                date: "2015-08-10"
+                commentary: "Comentario de la visita 2"
+                rating: 4.5
+                user: "abc123"
+                place: "abc123"
         '404':
           description: No se ha encontrado el usuario
           content:
@@ -339,17 +365,15 @@ paths:
           description: Id del usuario
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
         - name: placeId
           in: path
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -359,6 +383,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Visit'
+              example:
+              - id: "abc123"
+                date: "2020-01-01"
+                commentary: "Comentario de la visita 1"
+                rating: 2.5
+                user: "abc123"
+                place: "abc123"
+              - id: "123abc"
+                date: "2015-08-10"
+                commentary: "Comentario de la visita 2"
+                rating: 4.5
+                user: "abc123"
+                place: "abc123"
         '404':
           description: No se ha encontrado el usuario o el lugar
           content:
@@ -387,6 +424,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Visit'
+              example:
+              - id: "abc123"
+                date: "2020-01-01"
+                commentary: "Comentario de la visita 1"
+                rating: 2.5
+                user: "abc123"
+                place: "abc123"
+              - id: "123abc"
+                date: "2015-08-10"
+                commentary: "Comentario de la visita 2"
+                rating: 4.5
+                user: "abc123"
+                place: "abc123"
         '500':
           description: Error interno del servidor
           content:
@@ -406,6 +456,21 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/VisitIn'
+          examples:
+            Visita1:
+              value:
+                date: "2020-01-01"
+                rating: 2.5
+                commentary: "Comentario de la visita"
+                user: "abc123"
+                place: "abc123"
+            Visita2:
+              value:
+                date: "2015-08-10"
+                rating: 4.5
+                commentary: "Comentario de la visita"
+                user: "abc123"
+                place: "abc123"
       responses:
         '201':
           description: Se ha registrado correctamente
@@ -438,9 +503,8 @@ paths:
           description: Id de la visit
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -448,6 +512,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Visit'
+              examples:
+                Visita1:
+                  value:
+                    id: "abc123"
+                    date: "2020-01-01"
+                    rating: 2.5
+                    commentary: "Comentario de la visita"
+                    user: "abc123"
+                    place: "abc123"
+                Visita2:
+                  value:
+                    id: "abc123"
+                    date: "2015-08-10"
+                    rating: 4.5
+                    commentary: "Comentario de la visita"
+                    user: "abc123"
+                    place: "abc123"
         '404':
           description: No se ha encontrado la visita
           content:
@@ -472,9 +553,8 @@ paths:
           description: Id de la visita
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '204':
           description: No content
@@ -502,9 +582,8 @@ paths:
           description: Id de la visita
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevos datos de la visita
         required: true
@@ -512,6 +591,21 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/VisitIn'
+          examples:
+            Visita1:
+              value:
+                date: "2020-01-01"
+                rating: 2.5
+                commentary: "Comentario de la visita"
+                user: "abc123"
+                place: "abc123"
+            Visita2:
+              value:
+                date: "2015-08-10"
+                rating: 4.5
+                commentary: "Comentario de la visita"
+                user: "abc123"
+                place: "abc123"
       responses:
         '200':
           description: Ok
@@ -549,9 +643,8 @@ paths:
           description: Id de la visita
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevo comentario
         required: true
@@ -559,7 +652,11 @@ paths:
          application/json:
           schema:
             type: string
-            example: "Nuevo comentario"
+          examples:
+            Visita 1:
+              value: "Comentario de la visita 1"
+            Visita 2:
+              value: "Comentario de la visita 2"
       responses:
         '200':
           description: Ok
@@ -601,6 +698,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Place'
+              example:
+              - id: "abc123"
+                name: "Lugar 1"
+                description: "Descripción del lugar 1"
+                latitude: 20.5
+                longitude: 32.8
+                province: "abc123"
+              - id: "123abc"
+                name: "Lugar 2"
+                description: "Descripción del lugar 2"
+                latitude: 38.5
+                longitude: 46.2
+                province: "abc123"
         '500':
           description: Error interno del servidor
           content:
@@ -620,6 +730,21 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/PlaceIn'
+          examples:
+            Lugar1:
+              value:
+                name: "Lugar 1"
+                description: "Descripción del lugar 1"
+                latitude: 25.5
+                longitude: 42.8
+                province: "abc123"
+            Lugar2:
+              value:
+                name: "Lugar 2"
+                description: "Descripción del lugar 2"
+                latitude: 18.2
+                longitude: 37.4
+                province: "abc123"
       responses:
         '201':
           description: Se ha registrado correctamente
@@ -652,9 +777,8 @@ paths:
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -662,6 +786,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Place'
+              examples:
+                Lugar1:
+                  value:
+                    id: "abc123"
+                    name: "Lugar 1"
+                    description: "Descripción del lugar 1"
+                    latitude: 25.5
+                    longitude: 42.8
+                    province: "abc123"
+                Lugar2:
+                  value:
+                    id: "abc123"
+                    name: "Lugar 2"
+                    description: "Descripción del lugar 2"
+                    latitude: 18.2
+                    longitude: 37.4
+                    province: "abc123"
         '404':
           description: No se ha encontrado el lugar
           content:
@@ -686,9 +827,8 @@ paths:
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '204':
           description: No content
@@ -716,9 +856,8 @@ paths:
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevos datos del lugar
         required: true
@@ -726,6 +865,23 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/PlaceIn'
+          examples:
+            Lugar1:
+              value:
+                id: "abc123"
+                name: "Lugar 1"
+                description: "Descripción del lugar 1"
+                latitude: 25.5
+                longitude: 42.8
+                province: "abc123"
+            Lugar2:
+              value:
+                id: "abc123"
+                name: "Lugar 2"
+                description: "Descripción del lugar 2"
+                latitude: 18.2
+                longitude: 37.4
+                province: "abc123"
       responses:
         '200':
           description: Ok
@@ -763,9 +919,8 @@ paths:
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nueva descripción
         required: true
@@ -773,7 +928,11 @@ paths:
          application/json:
           schema:
             type: string
-            example: "Nueva descripción del lugar"
+          examples:
+            Lugar 1:
+              value: "Descripción del lugar 1"
+            Lugar 2:
+              value: "Descripción del lugar 2"
       responses:
         '200':
           description: Ok
@@ -787,77 +946,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
-        '404':
-          description: No se ha encontrado el lugar
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResourceNotFound'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /place/{placeId}/rating:
-    get:
-      tags:
-        - places
-      summary: Mostrar la valoración de un lugar
-      description: Mostrar la valoración media de un lugar determinado por su ID.
-      operationId: getPlaceRating
-      parameters:
-        - name: placeId
-          in: path
-          description: Id del lugar
-          required: true
-          schema:
-            type: number
-            format: int64
-            example: 1
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: string
-        '404':
-          description: No se ha encontrado el lugar
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ResourceNotFound'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
-  /place/{placeId}/numVisits:
-    get:
-      tags:
-        - places
-        - visits
-      summary: Mostrar el número de visitas a un lugar
-      description: Mostrar el número de visitas totales a un lugar determinado por su ID.
-      operationId: getPlaceNumVisits
-      parameters:
-        - name: placeId
-          in: path
-          description: Id del lugar
-          required: true
-          schema:
-            type: number
-            format: int64
-            example: 1
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: string
         '404':
           description: No se ha encontrado el lugar
           content:
@@ -884,9 +972,8 @@ paths:
           description: Id del lugar
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -896,6 +983,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Visit'
+              example:
+              - id: "abc123"
+                date: "2020-01-01"
+                commentary: "Comentario de la visita 1"
+                rating: 2.5
+                user: "abc123"
+                place: "abc123"
+              - id: "123abc"
+                date: "2015-08-10"
+                commentary: "Comentario de la visita 2"
+                rating: 4.5
+                user: "abc123"
+                place: "abc123"
         '404':
           description: No se ha encontrado el lugar
           content:
@@ -924,6 +1024,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Province'
+              example:
+              - id: "abc123"
+                name: "Madrid"
+                country: "abc123"
+              - id: "123abc"
+                name: "Barcelona"
+                country: "abc123"
         '500':
           description: Error interno del servidor
           content:
@@ -943,6 +1050,15 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/ProvinceIn'
+          examples:
+            Madrid:
+              value:
+                name: "Madrid"
+                country: "abc123"
+            Barcelona:
+              value:
+                name: "Barcelona"
+                country: "abc123"
       responses:
         '201':
           description: Se ha registrado correctamente
@@ -975,9 +1091,8 @@ paths:
           description: Id de la provincia
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -985,6 +1100,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Province'
+              examples:
+                Madrid:
+                  value:
+                    id: "abc123"
+                    name: "Madrid"
+                    country: "abc123"
+                Barcelona:
+                  value:
+                    id: "abc123"
+                    name: "Barcelona"
+                    country: "abc123"
         '404':
           description: No se ha encontrado la provincia
           content:
@@ -1009,9 +1135,8 @@ paths:
           description: Id de la provincia
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '204':
           description: No content
@@ -1039,9 +1164,8 @@ paths:
           description: Id de la provincia
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevos datos de la provincia
         required: true
@@ -1049,6 +1173,66 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/ProvinceIn'
+          examples:
+            Madrid:
+              value:
+                name: "Madrid"
+                country: "abc123"
+            Barcelona:
+              value:
+                name: "Barcelona"
+                country: "abc123"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Province'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado la provincia
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    patch:
+      tags:
+        - provinces
+      summary: Cambiar el nombre de una provincia
+      description: Cambiar el nombre de una provincia determinada por su ID.
+      operationId: patchProvince
+      parameters:
+        - name: provinceId
+          in: path
+          description: Id de la provincia
+          required: true
+          schema:
+            type: string
+            example: "abc123"
+      requestBody:
+        description: Nuevo nombre
+        required: true
+        content:
+         application/json:
+          schema:
+            type: string
+          examples:
+            Madrid:
+              value: "Madrid"
+            Barcelona:
+              value: "Barcelona"
       responses:
         '200':
           description: Ok
@@ -1088,9 +1272,8 @@ paths:
           description: Id de la provincia
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -1100,6 +1283,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Place'
+              example:
+              - id: "abc123"
+                name: "Lugar 1"
+                description: "Descripción del lugar 1"
+                latitude: 20.5
+                longitude: 32.8
+                province: "abc123"
+              - id: "123abc"
+                name: "Lugar 2"
+                description: "Descripción del lugar 2"
+                latitude: 38.5
+                longitude: 46.2
+                province: "abc123"
         '404':
           description: No se ha encontrado la provincia
           content:
@@ -1128,6 +1324,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Country'
+              example:
+              - id: "abc123"
+                name: "España"
+              - id: "123abc"
+                name: "Italia"
         '500':
           description: Error interno del servidor
           content:
@@ -1147,6 +1348,13 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/CountryIn'
+          examples:
+            España:
+              value:
+                name: "España"
+            Italia:
+              value:
+                name: "Italia"
       responses:
         '201':
           description: Se ha registrado correctamente
@@ -1179,9 +1387,8 @@ paths:
           description: Id del país
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -1189,6 +1396,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Country'
+              examples:
+                España:
+                  value:
+                    id: "abc123"
+                    name: "España"
+                Italia:
+                  value:
+                    id: "abc123"
+                    name: "Italia"
         '404':
           description: No se ha encontrado el país
           content:
@@ -1213,9 +1429,8 @@ paths:
           description: Id del país
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '204':
           description: No content
@@ -1243,9 +1458,8 @@ paths:
           description: Id del país
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       requestBody:
         description: Nuevos datos del país
         required: true
@@ -1253,6 +1467,15 @@ paths:
          application/json:
           schema:
             $ref: '#/components/schemas/CountryIn'
+          examples:
+            España:
+              value:
+                id: "abc123"
+                name: "España"
+            Italia:
+              value:
+                id: "abc123"
+                name: "Italia"
       responses:
         '200':
           description: Ok
@@ -1278,6 +1501,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+    patch:
+      tags:
+        - countries
+      summary: Cambiar el nombre de un país
+      description: Cambiar el nombre de un país determinado por su ID.
+      operationId: patchCountry
+      parameters:
+        - name: countryId
+          in: path
+          description: Id del país
+          required: true
+          schema:
+            type: string
+            example: "abc123"
+      requestBody:
+        description: Nuevo nombre
+        required: true
+        content:
+         application/json:
+          schema:
+            type: string
+          examples:
+            España:
+              value: "España"
+            Italia:
+              value: "Italia"
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+        '400':
+          description: La consulta no es válida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: No se ha encontrado el páis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFound'
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
   /country/{countryId}/provinces:
     get:
       tags:
@@ -1292,9 +1566,8 @@ paths:
           description: Id del país
           required: true
           schema:
-            type: number
-            format: int64
-            example: 1
+            type: string
+            example: "abc123"
       responses:
         '200':
           description: Ok
@@ -1304,6 +1577,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Province'
+              example:
+              - id: "abc123"
+                name: "Madrid"
+                country: "abc123"
+              - id: "123abc"
+                name: "Barcelona"
+                country: "abc123"
         '404':
           description: No se ha encontrado el país
           content:
@@ -1323,30 +1603,26 @@ components:
           - name
           - surname
         properties:
-          name:
+          username:
             type: string
             example: "Nombre"
-          surname:
+          password:
             type: string
-            example: "Apellido"
+            example: "1234"
           email:
             type: string
-            example: "Email"
+            example: "example@email.com"
           phone:
             type: string
-            example: "111111111"
-          sendData:
-            type: boolean
-            example: true
+            example: "123456789"
         type: object
       User:
         allOf:
           - type: object
             properties:
               id:
-                type: integer
-                format: int64
-                example: 1
+                type: string
+                example: "abc123"
           - $ref: '#/components/schemas/UserIn'
       VisitIn:
         required:
@@ -1361,7 +1637,7 @@ components:
           rating:
             type: number
             format: float
-            example: 0
+            example: 3.5
           commentary:
             type: string
             example: "Comentario de prueba"
@@ -1379,9 +1655,8 @@ components:
           - type: object
             properties:
               id:
-                type: integer
-                format: int64
-                example: 1
+                type: string
+                example: "abc123"
           - $ref: '#/components/schemas/VisitIn'
       PlaceIn:
         required:
@@ -1415,9 +1690,8 @@ components:
           - type: object
             properties:
               id:
-                type: integer
-                format: int64
-                example: 1
+                type: string
+                example: "abc123"
           - $ref: '#/components/schemas/PlaceIn'
       ProvinceIn:
         required:
@@ -1426,7 +1700,7 @@ components:
         properties:
           name:
             type: string
-            example: "Nombre de la provincia"
+            example: "Madrid"
           country:
             type: number
             format: int64
@@ -1437,9 +1711,8 @@ components:
           - type: object
             properties:
               id:
-                type: integer
-                format: int64
-                example: 1
+                type: string
+                example: "abc123"
           - $ref: '#/components/schemas/ProvinceIn'
       CountryIn:
         required:
@@ -1447,16 +1720,15 @@ components:
         properties:
           name:
             type: string
-            example: "Nombre del país"
+            example: "España"
         type: object
       Country:
         allOf:
           - type: object
             properties:
               id:
-                type: integer
-                format: int64
-                example: 1
+                type: string
+                example: "abc123"
           - $ref: '#/components/schemas/CountryIn'
       ErrorResponse:
         properties:
