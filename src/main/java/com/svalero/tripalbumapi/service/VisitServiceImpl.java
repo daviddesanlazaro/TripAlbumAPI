@@ -41,55 +41,65 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public Mono<Visit> findVisit(String id) throws VisitNotFoundException {
-        return visitRepository.findById(id).onErrorReturn(new Visit());
+        Mono<Visit> visitError = Mono.error(new VisitNotFoundException());
+        return visitRepository.findById(id).switchIfEmpty(visitError);
     }
 
     @Override
     public Mono<Visit> addVisit(VisitDTO visitDto) throws UserNotFoundException, PlaceNotFoundException {
-        Mono<User> user = userRepository.findById(visitDto.getUser()).onErrorReturn(new User());
-        Mono<Place> place = placeRepository.findById(visitDto.getPlace()).onErrorReturn(new Place());
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        Mono<User> monoUser = userRepository.findById(visitDto.getUser()).switchIfEmpty(userError);
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        Mono<Place> monoPlace = placeRepository.findById(visitDto.getPlace()).switchIfEmpty(placeError);
 
         ModelMapper mapper = new ModelMapper();
         Visit visit = mapper.map(visitDto, Visit.class);
-        visit.setUser(user.block());
-        visit.setPlace(place.block());
-//        byte[] bytes = visitDto.getImage().getBytes(StandardCharsets.UTF_8);
-//        visit.setImage(visitDto.getImage());
+        visit.setUser(monoUser.block());
+        visit.setPlace(monoPlace.block());
         return visitRepository.save(visit);
     }
 
     @Override
     public Mono<Void> deleteVisit(String id) throws VisitNotFoundException {
-        Mono<Visit> visit = visitRepository.findById(id).onErrorReturn(new Visit());
+        Mono<Visit> visit = Mono.error(new VisitNotFoundException());
+        visitRepository.findById(id).switchIfEmpty(visit);
         return visitRepository.deleteById(id);
     }
 
     @Override
     public Mono<Visit> modifyVisit(String id, VisitDTO visitDto) throws VisitNotFoundException, UserNotFoundException, PlaceNotFoundException {
-        Mono<Visit> monoVisit = visitRepository.findById(id).onErrorReturn(new Visit());
-        Mono<User> user = userRepository.findById(visitDto.getUser()).onErrorReturn(new User());
-        Mono<Place> place = placeRepository.findById(visitDto.getPlace()).onErrorReturn(new Place());
+        Mono<Visit> visitError = Mono.error(new VisitNotFoundException());
+        Mono<Visit> monoVisit = visitRepository.findById(id).switchIfEmpty(visitError);
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        Mono<User> monoUser = userRepository.findById(visitDto.getUser()).switchIfEmpty(userError);
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        Mono<Place> monoPlace = placeRepository.findById(visitDto.getPlace()).switchIfEmpty(placeError);
+
+        if (!monoVisit.block().getId().equals(id))
+            return visitError;
 
         ModelMapper mapper = new ModelMapper();
-        Visit visit = mapper.map(visitDto, Visit.class);
-        visit.setId(id);
-        visit.setUser(user.block());
-        visit.setPlace(place.block());
-        return visitRepository.save(visit);
+        Visit newVisit = mapper.map(visitDto, Visit.class);
+        newVisit.setId(id);
+        newVisit.setUser(monoUser.block());
+        newVisit.setPlace(monoPlace.block());
+        return visitRepository.save(newVisit);
     }
 
     @Override
     public Mono<Visit> patchVisit(String id, String commentary) throws VisitNotFoundException {
-        Mono<Visit> monoVisit = visitRepository.findById(id).onErrorReturn(new Visit());
-        Visit visit = monoVisit.block();
+        Mono<Visit> visitError = Mono.error(new VisitNotFoundException());
+        Visit visit = visitRepository.findById(id).switchIfEmpty(visitError).block();
         visit.setCommentary(commentary);
         return visitRepository.save(visit);
     }
 
     @Override
     public Flux<Visit> findByUserAndPlace(String userId, String placeId) throws UserNotFoundException, PlaceNotFoundException {
-        Mono<User> user = userRepository.findById(userId).onErrorReturn(new User());
-        Mono<Place> place = placeRepository.findById(placeId).onErrorReturn(new Place());
-        return visitRepository.findByUserAndPlace(user.block(), place.block());
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        Mono<User> monoUser = userRepository.findById(userId).switchIfEmpty(userError);
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        Mono<Place> monoPlace = placeRepository.findById(placeId).switchIfEmpty(placeError);
+        return visitRepository.findByUserAndPlace(monoUser.block(), monoPlace.block());
     }
 }

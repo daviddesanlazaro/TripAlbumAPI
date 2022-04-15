@@ -10,4 +10,5 @@ public interface UserRepository extends ReactiveMongoRepository<User, String> {
     Flux<User> findAll();
     Flux<User> findByUsername(String username);
     Flux<User> findByPhone(String phone);
+    Flux<User> findByUsernameAndPhone(String username, String phone);
 }

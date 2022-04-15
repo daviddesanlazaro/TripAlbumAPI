@@ -33,35 +33,51 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Override
     public Mono<Province> findProvince(String id) throws ProvinceNotFoundException {
-        return provinceRepository.findById(id).onErrorReturn(new Province());
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        return provinceRepository.findById(id).switchIfEmpty(provinceError);
     }
 
     @Override
     public Mono<Province> addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException {
-        Mono<Country> country = countryRepository.findById(provinceDto.getCountry()).onErrorReturn(new Country());
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        Mono<Country> monoCountry = countryRepository.findById(provinceDto.getCountry()).switchIfEmpty(countryError);
 
         ModelMapper mapper = new ModelMapper();
         Province province = mapper.map(provinceDto, Province.class);
-        province.setCountry(country.block());
+        province.setCountry(monoCountry.block());
         return provinceRepository.save(province);
     }
 
     @Override
     public Mono<Void> deleteProvince(String id) throws ProvinceNotFoundException {
-        Mono<Province> province = provinceRepository.findById(id).onErrorReturn(new Province());
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        provinceRepository.findById(id).switchIfEmpty(provinceError);
         return provinceRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Province> modifyProvince(String id, ProvinceDTO newProvinceDto) throws ProvinceNotFoundException, CountryNotFoundException {
-        Mono<Province> monoProvince = provinceRepository.findById(id).onErrorReturn(new Province());
-        Mono<Country> country = countryRepository.findById(newProvinceDto.getCountry()).onErrorReturn(new Country());
+    public Mono<Province> modifyProvince(String id, ProvinceDTO provinceDto) throws ProvinceNotFoundException, CountryNotFoundException {
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        Mono<Province> monoProvince = provinceRepository.findById(id).switchIfEmpty(provinceError);
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        Mono<Country> monoCountry = countryRepository.findById(provinceDto.getCountry()).switchIfEmpty(countryError);
+
+        if (!monoProvince.block().getId().equals(id))
+            return provinceError;
 
         ModelMapper mapper = new ModelMapper();
-        Province province = mapper.map(newProvinceDto, Province.class);
+        Province province = mapper.map(provinceDto, Province.class);
         province.setId(id);
-        province.setCountry(country.block());
+        province.setCountry(monoCountry.block());
 
+        return provinceRepository.save(province);
+    }
+
+    @Override
+    public Mono<Province> patchProvince(String id, String name) throws ProvinceNotFoundException {
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        Province province = provinceRepository.findById(id).switchIfEmpty(provinceError).block();
+        province.setName(name);
         return provinceRepository.save(province);
     }
 }

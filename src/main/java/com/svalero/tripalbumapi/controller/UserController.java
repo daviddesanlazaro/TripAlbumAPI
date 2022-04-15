@@ -42,9 +42,12 @@ public class UserController {
         } else if (username.equals("")) {
             logger.info("Show users by phone");
             users = userService.findByPhone(phone);
-        } else {
-            logger.info("Show users by name");
+        } else if (phone.equals("")) {
+            logger.info("Show users by username");
             users = userService.findByUsername(username);
+        } else {
+            logger.info("Show users by username and phone");
+            users = userService.findByUsernameAndPhone(username, phone);
         }
         logger.info("End getUsers");
         return ResponseEntity.ok(users);
@@ -120,6 +123,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        logger.info("400: Argument not valid");
         Map<String, String> errors = new HashMap<>();
         manve.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -131,21 +135,25 @@ public class UserController {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        logger.info("400: Bad request");
         return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
+        logger.info("404: User not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(unfe.getMessage()));
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
+        logger.info("404: Place not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        logger.info("500: Internal server error");
         return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

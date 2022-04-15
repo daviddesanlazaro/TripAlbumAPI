@@ -108,6 +108,7 @@ public class PlaceController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        logger.info("400: Argument not valid");
         Map<String, String> errors = new HashMap<>();
         manve.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -119,21 +120,25 @@ public class PlaceController {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        logger.info("400: Bad request");
         return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
+        logger.info("404: Place not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(ProvinceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProvinceNotFoundException(ProvinceNotFoundException pnfe) {
+        logger.info("404: Province not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        logger.info("500: Internal server error");
         return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

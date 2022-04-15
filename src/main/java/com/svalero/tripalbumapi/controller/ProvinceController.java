@@ -77,6 +77,15 @@ public class ProvinceController {
         return ResponseEntity.ok(newProvince);
     }
 
+    // Cambiar nombre de una provincia
+    @PatchMapping("/province/{provinceId}")
+    public ResponseEntity<Mono<Province>> patchProvince(@PathVariable String provinceId, @Valid @RequestBody String name) throws ProvinceNotFoundException {
+        logger.info("Start PatchProvince " + provinceId);
+        Mono<Province> province = provinceService.patchProvince(provinceId, name);
+        logger.info("End PatchProvince " + provinceId);
+        return ResponseEntity.ok(province);
+    }
+
     // Mostrar todos los lugares de una provincia
     @GetMapping("/province/{provinceId}/places")
     public ResponseEntity<Flux<Place>> getPlaces(@PathVariable String provinceId,
@@ -101,6 +110,7 @@ public class ProvinceController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        logger.info("400: Argument not valid");
         Map<String, String> errors = new HashMap<>();
         manve.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -112,21 +122,25 @@ public class ProvinceController {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        logger.info("400: Bad request");
         return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(ProvinceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProvinceNotFoundException(ProvinceNotFoundException pnfe) {
+        logger.info("404: Province not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(CountryNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCountryNotFoundException(CountryNotFoundException cnfe) {
+        logger.info("404: Country not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(cnfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        logger.info("500: Internal server error");
         return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

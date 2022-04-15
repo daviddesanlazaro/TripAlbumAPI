@@ -36,41 +36,49 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public Mono<Place> findPlace(String id) throws PlaceNotFoundException {
-        return placeRepository.findById(id).onErrorReturn(new Place());
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        return placeRepository.findById(id).switchIfEmpty(placeError);
     }
 
     @Override
     public Mono<Place> addPlace(PlaceDTO placeDto) throws ProvinceNotFoundException {
-        Mono<Province> province = provinceRepository.findById(placeDto.getProvince()).onErrorReturn(new Province());
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        Mono<Province> monoProvince = provinceRepository.findById(placeDto.getProvince()).switchIfEmpty(provinceError);
         ModelMapper mapper = new ModelMapper();
         Place place = mapper.map(placeDto, Place.class);
-        place.setProvince(province.block());
+        place.setProvince(monoProvince.block());
         return placeRepository.save(place);
     }
 
     @Override
     public Mono<Void> deletePlace(String id) throws PlaceNotFoundException {
-        Mono<Place> place = placeRepository.findById(id).onErrorReturn(new Place());
+        Mono<Place> place = Mono.error(new PlaceNotFoundException());
+        placeRepository.findById(id).switchIfEmpty(place);
         return placeRepository.deleteById(id);
     }
 
     @Override
-    public Mono<Place> modifyPlace(String id, PlaceDTO newPlaceDto) throws PlaceNotFoundException, ProvinceNotFoundException {
-        Mono<Place> monoPlace = placeRepository.findById(id).onErrorReturn(new Place());
-        Mono<Province> province = provinceRepository.findById(newPlaceDto.getProvince()).onErrorReturn(new Province());
+    public Mono<Place> modifyPlace(String id, PlaceDTO placeDto) throws PlaceNotFoundException, ProvinceNotFoundException {
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        Mono<Place> monoPlace = placeRepository.findById(id).switchIfEmpty(placeError);
+        Mono<Province> provinceError = Mono.error(new ProvinceNotFoundException());
+        Mono<Province> monoProvince = provinceRepository.findById(placeDto.getProvince()).switchIfEmpty(provinceError);
+
+        if (!monoPlace.block().getId().equals(id))
+            return monoPlace;
 
         ModelMapper mapper = new ModelMapper();
-        Place place = mapper.map(newPlaceDto, Place.class);
+        Place place = mapper.map(placeDto, Place.class);
         place.setId(id);
-        place.setProvince(province.block());
+        place.setProvince(monoProvince.block());
 
         return placeRepository.save(place);
     }
 
     @Override
     public Mono<Place> patchPlace(String id, String description) throws PlaceNotFoundException {
-        Mono<Place> monoPlace = placeRepository.findById(id).onErrorReturn(new Place());
-        Place place = monoPlace.block();
+        Mono<Place> placeError = Mono.error(new PlaceNotFoundException());
+        Place place = placeRepository.findById(id).switchIfEmpty(placeError).block();
         place.setDescription(description);
         return placeRepository.save(place);
     }

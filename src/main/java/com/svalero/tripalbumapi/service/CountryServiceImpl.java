@@ -21,7 +21,8 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Mono<Country> findCountry(String id) throws CountryNotFoundException {
-        return countryRepository.findById(id).onErrorReturn(new Country());
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        return countryRepository.findById(id).switchIfEmpty(countryError);
     }
 
     @Override
@@ -31,15 +32,24 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public Mono<Void> deleteCountry(String id) throws CountryNotFoundException {
-        Mono<Country> country = countryRepository.findById(id).onErrorReturn(new Country());
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        countryRepository.findById(id).switchIfEmpty(countryError);
         return countryRepository.deleteById(id);
     }
 
     @Override
     public Mono<Country> modifyCountry(String id, Country newCountry) throws CountryNotFoundException {
-        Mono<Country> monoCountry = countryRepository.findById(id).onErrorReturn(new Country());
-        Country country = monoCountry.block();
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        Country country = countryRepository.findById(id).switchIfEmpty(countryError).block();
         country.setName(newCountry.getName());
+        return countryRepository.save(country);
+    }
+
+    @Override
+    public Mono<Country> patchCountry(String id, String name) throws CountryNotFoundException {
+        Mono<Country> countryError = Mono.error(new CountryNotFoundException());
+        Country country = countryRepository.findById(id).switchIfEmpty(countryError).block();
+        country.setName(name);
         return countryRepository.save(country);
     }
 }

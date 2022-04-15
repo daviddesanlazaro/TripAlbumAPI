@@ -19,8 +19,7 @@ public class VisitDTO {
     @NotNull
     private LocalDate date;
     @Min(value = 0)
-    @Max(value = 10)
+    @Max(value = 5)
     private float rating;
     private String commentary;
-    private String image;
 }
