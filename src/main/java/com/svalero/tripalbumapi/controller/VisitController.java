@@ -90,6 +90,7 @@ public class VisitController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        logger.info("400: Argument not valid");
         Map<String, String> errors = new HashMap<>();
         manve.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -101,26 +102,31 @@ public class VisitController {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        logger.info("400: Bad request");
         return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(VisitNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleVisitNotFoundException(VisitNotFoundException vnfe) {
+        logger.info("404: Visit not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(vnfe.getMessage()));
     }
 
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePlaceNotFoundException(PlaceNotFoundException pnfe) {
+        logger.info("404: Place not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(pnfe.getMessage()));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException unfe) {
+        logger.info("404: User not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(unfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        logger.info("500: Internal server error");
         return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

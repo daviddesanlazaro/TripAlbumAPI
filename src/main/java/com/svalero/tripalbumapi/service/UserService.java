@@ -10,6 +10,7 @@ public interface UserService {
     Mono<User> findUser(String id) throws UserNotFoundException;
     Flux<User> findByUsername(String username);
     Flux<User> findByPhone(String phone);
+    Flux<User> findByUsernameAndPhone(String username, String phone);
 
     Mono<User> addUser(User user);
     Mono<Void> deleteUser(String id) throws UserNotFoundException;

@@ -16,4 +16,5 @@ public interface ProvinceService {
     Mono<Province> addProvince(ProvinceDTO provinceDto) throws CountryNotFoundException;
     Mono<Void> deleteProvince(String id) throws ProvinceNotFoundException;
     Mono<Province> modifyProvince(String id, ProvinceDTO provinceDto) throws ProvinceNotFoundException, CountryNotFoundException;
+    Mono<Province> patchProvince(String id, String name) throws ProvinceNotFoundException;
 }

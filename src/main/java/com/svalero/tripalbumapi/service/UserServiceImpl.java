@@ -20,18 +20,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<User> findUser(String id) throws UserNotFoundException {
-        return userRepository.findById(id).onErrorReturn(new User());
+    public Mono<User> findUser(String id) {
+        Mono<User> user = Mono.error(new UserNotFoundException());
+        return userRepository.findById(id).switchIfEmpty(user);
     }
 
     @Override
     public Flux<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        return userRepository.findByUsername(username).switchIfEmpty(userError);
     }
 
     @Override
     public Flux<User> findByPhone(String phone) {
-        return userRepository.findByPhone(phone).onErrorReturn(new User());
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        return userRepository.findByPhone(phone).switchIfEmpty(userError);
+    }
+
+    @Override
+    public Flux<User> findByUsernameAndPhone(String username, String phone) {
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        return userRepository.findByUsernameAndPhone(username, phone).switchIfEmpty(userError);
     }
 
     @Override
@@ -40,16 +49,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<Void> deleteUser(String id) throws UserNotFoundException {
-        Mono<User> user = userRepository.findById(id).onErrorReturn(new User());
+    public Mono<Void> deleteUser(String id) {
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        userRepository.findById(id).switchIfEmpty(userError);
         return userRepository.deleteById(id);
     }
 
     @Override
-    public Mono<User> modifyUser(String id, User newUser) throws UserNotFoundException {
-        Mono<User> monoUser = userRepository.findById(id).onErrorReturn(new User());
+    public Mono<User> modifyUser(String id, User newUser) {
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        User user = userRepository.findById(id).switchIfEmpty(userError).block();
 
-        User user = monoUser.block();
         user.setUsername(newUser.getUsername());
         user.setPassword(newUser.getPassword());
         user.setEmail(newUser.getEmail());
@@ -59,9 +69,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Mono<User> patchUser(String id, String email) throws UserNotFoundException {
-        Mono<User> monoUser = userRepository.findById(id).onErrorReturn(new User());
-        User user = monoUser.block();
+    public Mono<User> patchUser(String id, String email) {
+        Mono<User> userError = Mono.error(new UserNotFoundException());
+        User user = userRepository.findById(id).switchIfEmpty(userError).block();
         user.setEmail(email);
         return userRepository.save(user);
     }

@@ -12,4 +12,5 @@ public interface CountryService {
     Mono<Country> addCountry(Country country);
     Mono<Void> deleteCountry(String id) throws CountryNotFoundException;
     Mono<Country> modifyCountry(String id, Country country) throws CountryNotFoundException;
+    Mono<Country> patchCountry(String id, String name) throws CountryNotFoundException;
 }

@@ -79,6 +79,15 @@ public class CountryController {
         return ResponseEntity.ok(newCountry);
     }
 
+    // Cambiar nombre de un país
+    @PatchMapping("/country/{countryId}")
+    public ResponseEntity<Mono<Country>> patchCountry(@PathVariable String countryId, @Valid @RequestBody String name) throws CountryNotFoundException {
+        logger.info("Start PatchCountry " + countryId);
+        Mono<Country> country = countryService.patchCountry(countryId, name);
+        logger.info("End patchCountry " + countryId);
+        return ResponseEntity.ok(country);
+    }
+
     // Mostrar todas las provincias de un país
     @GetMapping("/country/{countryId}/provinces")
     public ResponseEntity<Flux<Province>> getProvinces(@PathVariable String countryId) throws CountryNotFoundException {
@@ -95,6 +104,7 @@ public class CountryController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException manve) {
+        logger.info("400: Argument not valid");
         Map<String, String> errors = new HashMap<>();
         manve.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -106,16 +116,19 @@ public class CountryController {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException bre) {
+        logger.info("400: Bad request");
         return ResponseEntity.badRequest().body(ErrorResponse.badRequest(bre.getMessage()));
     }
 
     @ExceptionHandler(CountryNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCountryNotFoundException(CountryNotFoundException cnfe) {
+        logger.info("404: Country not found");
         return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(cnfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
+        logger.info("500: Internal server error");
         return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }

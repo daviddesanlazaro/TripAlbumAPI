@@ -38,12 +38,9 @@ public class Visit {
 
     @Field
     @Min(value = 0)
-    @Max(value = 10)
+    @Max(value = 5)
     private float rating;
 
     @Field
     private String commentary;
-
-    @Field
-    private String image;
 }
