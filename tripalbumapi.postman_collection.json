@@ -6,67 +6,10 @@
 	},
 	"item": [
 		{
-			"name": "GET ALL",
+			"name": "Countries",
 			"item": [
 				{
-					"name": "Consultar usuarios",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/users?view_all=false",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"users"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Nombre",
-									"disabled": true
-								},
-								{
-									"key": "surname",
-									"value": "Apellido",
-									"disabled": true
-								},
-								{
-									"key": "send_data",
-									"value": "false",
-									"disabled": true
-								},
-								{
-									"key": "view_all",
-									"value": "false"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar visitas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar países",
+					"name": "Mostrar todo",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -84,7 +27,133 @@
 					"response": []
 				},
 				{
-					"name": "Consultar provincias",
+					"name": "Mostrar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/country/625898160f06e03a43ea242b",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"625898160f06e03a43ea242b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insertar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Italia\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/countries",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"countries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/country/625898160f06e03a43ea242b",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"625898160f06e03a43ea242b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n        \"name\": \"Francia\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/country/625898160f06e03a43ea242b",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"625898160f06e03a43ea242b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar nombre",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "Portugal",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/country/624c41602f4d661aa149ab09",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"624c41602f4d661aa149ab09"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Provinces",
+			"item": [
+				{
+					"name": "Mostrar todo",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -102,7 +171,153 @@
 					"response": []
 				},
 				{
-					"name": "Consultar lugares",
+					"name": "Mostrar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/province/624c4a76e6a95b2e80b77bea",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"624c4a76e6a95b2e80b77bea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por país",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/country/624c41602f4d661aa149ab09/provinces",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"country",
+								"624c41602f4d661aa149ab09",
+								"provinces"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insertar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Zaragoza\",\r\n    \"country\": \"624c41602f4d661aa149ab09\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/provinces",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"provinces"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/province/624c4a76e6a95b2e80b77bea",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"624c4a76e6a95b2e80b77bea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n        \"name\": \"Sevilla\",\r\n        \"country\": \"624c41602f4d661aa149ab09\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/province/6258985b0f06e03a43ea242p",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"6258985b0f06e03a43ea242p"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar nombre",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "Teruel",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/province/6258985b0f06e03a43ea242",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"province",
+								"6258985b0f06e03a43ea242"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Places",
+			"item": [
+				{
+					"name": "Mostrar todo",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -118,205 +333,217 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "GET BY ID",
-			"item": [
-				{
-					"name": "Consultar país",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/country/9",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"9"
-							]
-						}
-					},
-					"response": []
 				},
 				{
-					"name": "Consultar provincia",
+					"name": "Mostrar por ID",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/province/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar usuario",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/33",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"33"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consultar lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/34",
+							"raw": "localhost:8081/place/624c4ae9e6a95b2e80b77beb",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"place",
-								"34"
+								"624c4ae9e6a95b2e80b77beb"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Consultar visita",
+					"name": "Mostrar por provincia",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/visit/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"visit",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "GET BY PARENT",
-			"item": [
-				{
-					"name": "Consulta provincias por país",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/country/1/provinces",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"1",
-								"provinces"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta visitas por lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/2/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta visitas por usuario",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/2/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"2",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Consulta lugares por provincia",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/province/1/places",
+							"raw": "localhost:8081/province/6258985b0f06e03a43ea242c/places",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"province",
-								"1",
+								"6258985b0f06e03a43ea242c",
 								"places"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ill",
+									"disabled": true
+								}
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "POST",
-			"item": [
+				},
 				{
-					"name": "Insertar usuario",
+					"name": "Insertar",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Nombre\",\r\n    \"surname\": \"Apellido\",\r\n    \"email\": \"Correo\",\r\n    \"phone\": \"Teléfono\",\r\n    \"sendData\": true\r\n}",
+							"raw": "{\r\n    \"name\": \"Playa\",\r\n    \"description\": \"Descripción del lugar\",\r\n    \"latitude\": 50.7,\r\n    \"longitude\": 16.3,\r\n    \"province\": \"6258985b0f06e03a43ea242c\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/places",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"places"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/62589cfe575e9f7912fd1417",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"62589cfe575e9f7912fd1417"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n        \"name\": \"Lugar 2\",\r\n        \"description\": \"Descripcion lugar\",\r\n        \"latitude\": 41.6,\r\n        \"longitude\": -0.9,\r\n        \"province\": \"624c4a76e6a95b2e80b77bea\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/place/62589cfe575e9f7912fd1417",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"62589cfe575e9f7912fd1417"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar descripción",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "Desc",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/place/62589cfe575e9f7912fd141",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"62589cfe575e9f7912fd141"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Mostrar todo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/users",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "dsl",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "111111111",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/62589df472a5b35c6e94898f",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"62589df472a5b35c6e94898f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insertar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Amigo 2\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"amigo@email.com\",\r\n    \"phone\": \"111111111\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -337,13 +564,32 @@
 					"response": []
 				},
 				{
-					"name": "Insertar lugar",
+					"name": "Eliminar",
 					"request": {
-						"method": "POST",
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/62589df472a5b35c6e94898f",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"62589df472a5b35c6e94898f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modificar",
+					"request": {
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Lugar2\",\r\n    \"description\": \"Lugar de prueba 2\",\r\n    \"latitude\": 50.7,\r\n    \"longitude\": 16.3,\r\n    \"province\": 1\r\n}",
+							"raw": "{\r\n    \"username\": \"vsa\",\r\n    \"password\": \"1234\",\r\n    \"email\": \"Correo@email.com\",\r\n    \"phone\": \"123456789\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -351,26 +597,159 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/places",
+							"raw": "localhost:8081/user/62589df472a5b35c6e94898f",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
-								"places"
+								"user",
+								"62589df472a5b35c6e94898f"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Insertar visita",
+					"name": "Cambiar email",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "prueba@email.com",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/user/62589df472a5b35c6e94898f",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"62589df472a5b35c6e94898f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Visits",
+			"item": [
+				{
+					"name": "Mostrar todo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/visit/624c4be9e6a95b2e80b77bee",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"visit",
+								"624c4be9e6a95b2e80b77bee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/place/624c4b1be6a95b2e80b77bc/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"place",
+								"624c4b1be6a95b2e80b77bc",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/624c4caee6a95b2e80b77bf2/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"624c4caee6a95b2e80b77bf2",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mostrar por usuario y lugar",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/user/624c4caee6a95b2e80b77bf/place/624c4ae9e6a95b2e80b77beb/visits",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"user",
+								"624c4caee6a95b2e80b77bf",
+								"place",
+								"624c4ae9e6a95b2e80b77beb",
+								"visits"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insertar",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"date\": \"01-01-2021\",\r\n    \"rating\": 3.5,\r\n    \"commentary\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 2\r\n}",
+							"raw": "{\r\n    \"date\": \"2021-01-01\",\r\n    \"rating\": 3.0,\r\n    \"commentary\": \"Comentario\",\r\n    \"user\": \"624c4caee6a95b2e80b77bf2\",\r\n    \"place\": \"624c4b1be6a95b2e80b77bec\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -391,172 +770,32 @@
 					"response": []
 				},
 				{
-					"name": "Insertar provincia",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Provincia\",\r\n    \"country\": 9\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/provinces",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"provinces"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Insertar país",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"País\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/countries",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"countries"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "DELETE",
-			"item": [
-				{
-					"name": "Borrar lugar",
+					"name": "Eliminar",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8081/place/66",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"66"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Borrar usuario",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/33",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"33"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Borrar visita",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/visit/66",
+							"raw": "localhost:8081/visit/625857fbccc7de0a1f6ab1b4",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"66"
+								"625857fbccc7de0a1f6ab1b4"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Borrar país",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/country/34",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"34"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Borrar provincia",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/province/163",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"163"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "PUT",
-			"item": [
-				{
-					"name": "Modificar lugar",
+					"name": "Modificar",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\r\n        \"name\": \"Lugar\",\r\n        \"description\": \"Lugar de prueba\",\r\n        \"latitude\": 55.7,\r\n        \"longitude\": 55.3,\r\n        \"province\": 1\r\n    }",
+							"raw": "{\r\n    \"date\": \"2020-04-04\",\r\n    \"rating\": 2.8,\r\n    \"commentary\": \"Comentario2\",\r\n    \"user\": \"624c4ba4e6a95b2e80b77bed\",\r\n    \"place\": \"624c4ae9e6a95b2e80b77beb\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -564,138 +803,21 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/place/34",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"34"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Modificar usuario",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Nombre\",\r\n    \"surname\": \"Apellido\",\r\n    \"email\": \"Correo\",\r\n    \"phone\": \"Teléfono\",\r\n    \"sendData\": false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/user/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Modificar visita",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"date\": \"05-05-2015\",\r\n    \"rating\": 2.5,\r\n    \"commentary\": \"Comentario\",\r\n    \"user\": 1,\r\n    \"place\": 3\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/visit/1",
+							"raw": "localhost:8081/visit/62589e6772a5b35c6e948990",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"1"
+								"62589e6772a5b35c6e948990"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Modificar provincia",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "  {\r\n        \"name\": \"Provincia\",\r\n        \"country\": 1\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/province/194",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"194"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Modificar país",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "  {\r\n        \"name\": \"País5\"\r\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/country/4",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"4"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "PATCH",
-			"item": [
-				{
-					"name": "Patch Visit",
+					"name": "Cambiar comentario",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -709,396 +831,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8081/visit/1",
+							"raw": "localhost:8081/visit/624c4be9e6a95b2e80b77bee",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
 								"visit",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Country",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "País de prueba 1",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/country/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"country",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Province",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "Provincia de prueba 1",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/province/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch User",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "prueba@email.com",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/user/1",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch Place",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "Descripción de prueba",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/place/2",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "SQL",
-			"item": [
-				{
-					"name": "Valoración media de un lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/2/rating",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2",
-								"rating"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Numero de visitas de un lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/2/numVisits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2",
-								"numVisits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Usuarios únicos que han visitado un lugar",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/place/2/numUsers",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"2",
-								"numUsers"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "JPQL",
-			"item": [
-				{
-					"name": "Lugares visitados por un usuario",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/user/1/places",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"1",
-								"places"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Visitas recientes",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "01-03-2020",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/visits/date",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"visits",
-								"date"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mostrar comentario de una visita",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8081/visit/1/commentary",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"visit",
-								"1",
-								"commentary"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Endpoints con DTOs",
-			"item": [
-				{
-					"name": "Mostrar visitas por usuario y lugar",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"user\": 2,\r\n    \"place\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/user/place/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"place",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mostrar visitas por lugar y valoración",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"rating\": 4.5,\r\n    \"place\": 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/place/visits/rating",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"place",
-								"visits",
-								"rating"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Eliminar visitas de un usuario antes de una fecha",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"user\": 2,\r\n    \"rating\": 0.5\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/user/visits",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"user",
-								"visits"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Mostrar lugares de una provincia con mayor latitud",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"latitude\": 60,\r\n    \"province\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8081/province/places/latitude",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"province",
-								"places",
-								"latitude"
+								"624c4be9e6a95b2e80b77bee"
 							]
 						}
 					},
