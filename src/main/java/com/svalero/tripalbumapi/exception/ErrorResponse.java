@@ -38,6 +38,4 @@ public class ErrorResponse {
     public static ErrorResponse internalServerError(String message) {
         return new ErrorResponse(500, message);
     }
-
 }
-
