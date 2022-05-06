@@ -123,12 +123,12 @@ public class CountryController {
     @ExceptionHandler(CountryNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCountryNotFoundException(CountryNotFoundException cnfe) {
         logger.info("404: Country not found");
-        return ResponseEntity.badRequest().body(ErrorResponse.resourceNotFound(cnfe.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.resourceNotFound(cnfe.getMessage()));
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerErrorException(InternalServerErrorException isee) {
         logger.info("500: Internal server error");
-        return ResponseEntity.badRequest().body(ErrorResponse.internalServerError(isee.getMessage()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.internalServerError(isee.getMessage()));
     }
 }
